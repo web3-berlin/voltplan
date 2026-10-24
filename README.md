@@ -4,6 +4,16 @@ Planvolt is a Powerhouse document-model package for electrical planning. It turn
 
 The package is built as a Powerhouse document model plus a React editor, so it runs in Connect and can be consumed by reactors, processors and subgraphs the same way as other Powerhouse packages.
 
+## Screenshots
+
+| Circuits & cable sizing | Bill of materials |
+|---|---|
+| [![Circuit load, breaker, cable and voltage-drop checks](docs/screenshots/circuits.webp)](docs/screenshots/circuits.webp) | [![Bill of materials grouped by appliances, cabinet and cable](docs/screenshots/bom.webp)](docs/screenshots/bom.webp) |
+| **KNX group addresses** | **DIN-rail cabinet planning** |
+| [![KNX bus participants, group addresses and DPT mapping](docs/screenshots/knx.webp)](docs/screenshots/knx.webp) | [![Distribution board DIN-rail layout in TE with reserve calculation](docs/screenshots/cabinet.webp)](docs/screenshots/cabinet.webp) |
+| **Inspection protocol** | **Generated single-line diagram** |
+| [![Per-circuit inspection protocol with RCD, insulation, continuity and loop impedance](docs/screenshots/protocol.webp)](docs/screenshots/protocol.webp) | [![Auto-generated single-line circuit diagram](docs/screenshots/diagram.webp)](docs/screenshots/diagram.webp) |
+
 ## What is included
 
 | Area | Features |

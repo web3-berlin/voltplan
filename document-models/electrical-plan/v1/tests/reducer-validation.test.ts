@@ -616,7 +616,10 @@ describe("installation reducer validation", () => {
     expect(() =>
       installationOps.updateSymbolDetailsOperation(
         state,
-        actions.updateSymbolDetails({ unitId: "missing", id: "symbol_details" }),
+        actions.updateSymbolDetails({
+          unitId: "missing",
+          id: "symbol_details",
+        }),
       ),
     ).toThrow("Unknown unit");
     expect(() =>
@@ -664,10 +667,7 @@ describe("circuit reducer validation", () => {
     ).toThrow("Circuit number already exists");
 
     expect(() =>
-      addCircuitTo(
-        state,
-        validCircuit({ id: "bad_sk_zero", skNumber: 0 }),
-      ),
+      addCircuitTo(state, validCircuit({ id: "bad_sk_zero", skNumber: 0 })),
     ).toThrow("Circuit number must be a positive integer");
     expect(() =>
       addCircuitTo(
@@ -818,7 +818,14 @@ describe("circuit reducer validation", () => {
 
   it("accepts optional circuit values and updates fields", () => {
     const state = emptyState();
-    addCircuitTo(state, validCircuit({ rcdMa: 30, groupedCircuits: 2, cable: { type: "NYM-J", crossSectionMm2: 2.5, lengthM: 10 } }));
+    addCircuitTo(
+      state,
+      validCircuit({
+        rcdMa: 30,
+        groupedCircuits: 2,
+        cable: { type: "NYM-J", crossSectionMm2: 2.5, lengthM: 10 },
+      }),
+    );
     expect(state.circuits[0]).toMatchObject({
       distributorId: null,
       installationMethod: "B2",

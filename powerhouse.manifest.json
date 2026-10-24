@@ -17,9 +17,7 @@
     {
       "id": "electrical-plan-editor",
       "name": "Electrical Plan Editor",
-      "documentTypes": [
-        "planvolt/electrical-plan"
-      ]
+      "documentTypes": ["planvolt/electrical-plan"]
     }
   ],
   "processors": [],

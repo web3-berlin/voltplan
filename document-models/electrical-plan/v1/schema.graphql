@@ -335,60 +335,183 @@ input BackgroundInput {
 
 # installation-plan
 
-input AddUnitInput { id: OID! name: String! level: Int! }
+input AddUnitInput {
+  id: OID!
+  name: String!
+  level: Int!
+}
 
-input RenameUnitInput { id: OID! name: String! }
+input RenameUnitInput {
+  id: OID!
+  name: String!
+}
 
-input AddRoomInput { unitId: OID! room: RoomInput! }
+input AddRoomInput {
+  unitId: OID!
+  room: RoomInput!
+}
 
-input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }
+input UpdateRoomInput {
+  unitId: OID!
+  id: OID!
+  name: String
+  fillColor: String
+  points: [PositionInput!]
+  labelX: Float
+  labelY: Float
+  locked: Boolean
+}
 
-input RemoveRoomInput { unitId: OID! id: OID! }
+input RemoveRoomInput {
+  unitId: OID!
+  id: OID!
+}
 
-input AddSymbolInput { unitId: OID! symbol: SymbolInput! }
+input AddSymbolInput {
+  unitId: OID!
+  symbol: SymbolInput!
+}
 
-input UpdateSymbolInput { unitId: OID! id: OID! defId: String circuitId: OID roomId: String label: String color: String rotation: Float mountHeightCm: Float locked: Boolean knxEnabled: Boolean }
+input UpdateSymbolInput {
+  unitId: OID!
+  id: OID!
+  defId: String
+  circuitId: OID
+  roomId: String
+  label: String
+  color: String
+  rotation: Float
+  mountHeightCm: Float
+  locked: Boolean
+  knxEnabled: Boolean
+}
 
-input UpdateSymbolDetailsInput { unitId: OID! id: OID! price: Float note: String }
+input UpdateSymbolDetailsInput {
+  unitId: OID!
+  id: OID!
+  price: Float
+  note: String
+}
 
-input MoveSymbolInput { unitId: OID! id: OID! x: Float! y: Float! }
+input MoveSymbolInput {
+  unitId: OID!
+  id: OID!
+  x: Float!
+  y: Float!
+}
 
-input RemoveSymbolInput { unitId: OID! id: OID! }
+input RemoveSymbolInput {
+  unitId: OID!
+  id: OID!
+}
 
-input SetProjectNameInput { name: String! }
+input SetProjectNameInput {
+  name: String!
+}
 
-input SetActiveUnitInput { unitId: OID! }
+input SetActiveUnitInput {
+  unitId: OID!
+}
 
-input SetUnitBackgroundInput { unitId: OID! background: BackgroundInput }
+input SetUnitBackgroundInput {
+  unitId: OID!
+  background: BackgroundInput
+}
 
-input UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }
+input UpdateUnitBackgroundInput {
+  unitId: OID!
+  dataUrl: String
+  widthCm: Float
+  heightCm: Float
+  x: Float
+  y: Float
+  scale: Float
+  opacity: Float
+  rotation: Float
+  locked: Boolean
+}
 
-input UpdateSettingsInput { settings: ElectricalSettingsInput! }
+input UpdateSettingsInput {
+  settings: ElectricalSettingsInput!
+}
 
 # circuits
 
-input AddCircuitInput { circuit: CircuitInput! }
+input AddCircuitInput {
+  circuit: CircuitInput!
+}
 
-input UpdateCircuitInput { id: OID! name: String kind: String distributorId: OID color: String ratingA: Float characteristic: String poles: Int rcdMa: Int rcbo: Boolean phases: [String!] cableType: String crossSectionMm2: Float lengthM: Float notes: String installationMethod: String ambientTempC: Float groupedCircuits: Int }
+input UpdateCircuitInput {
+  id: OID!
+  name: String
+  kind: String
+  distributorId: OID
+  color: String
+  ratingA: Float
+  characteristic: String
+  poles: Int
+  rcdMa: Int
+  rcbo: Boolean
+  phases: [String!]
+  cableType: String
+  crossSectionMm2: Float
+  lengthM: Float
+  notes: String
+  installationMethod: String
+  ambientTempC: Float
+  groupedCircuits: Int
+}
 
-input RemoveCircuitInput { id: OID! }
+input RemoveCircuitInput {
+  id: OID!
+}
 
-input AssignSymbolCircuitInput { unitId: OID! symbolId: OID! circuitId: OID }
+input AssignSymbolCircuitInput {
+  unitId: OID!
+  symbolId: OID!
+  circuitId: OID
+}
 
-input AddRouteInput { route: CableRouteInput! }
+input AddRouteInput {
+  route: CableRouteInput!
+}
 
-input UpdateRouteInput { id: OID! circuitId: OID unitId: OID points: [PositionInput!] reservePercent: Float }
+input UpdateRouteInput {
+  id: OID!
+  circuitId: OID
+  unitId: OID
+  points: [PositionInput!]
+  reservePercent: Float
+}
 
-input RemoveRouteInput { id: OID! }
+input RemoveRouteInput {
+  id: OID!
+}
 
 # cabinet-knx-protocol
 
-input AddDistributorInput { distributor: DistributorInput! }
+input AddDistributorInput {
+  distributor: DistributorInput!
+}
 
-input UpdateDistributorInput { id: OID! name: String rows: Int tePerRow: Int reservePercent: Float location: String }
+input UpdateDistributorInput {
+  id: OID!
+  name: String
+  rows: Int
+  tePerRow: Int
+  reservePercent: Float
+  location: String
+}
 
-input PlanCabinetInput { distributorId: OID! devices: [CabinetDeviceInput!]! }
+input PlanCabinetInput {
+  distributorId: OID!
+  devices: [CabinetDeviceInput!]!
+}
 
-input SetGroupAddressesInput { addresses: [GroupAddressInput!]! }
+input SetGroupAddressesInput {
+  addresses: [GroupAddressInput!]!
+}
 
-input UpdateReportInput { report: ReportInput! }
+input UpdateReportInput {
+  report: ReportInput!
+}

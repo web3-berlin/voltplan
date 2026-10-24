@@ -85,10 +85,7 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
         s.circuitId = i.circuitId;
       }
       if (i.roomId !== undefined) {
-        if (
-          i.roomId != null &&
-          !(u.rooms ?? []).some((r) => r.id === i.roomId)
-        )
+        if (i.roomId != null && !(u.rooms ?? []).some((r) => r.id === i.roomId))
           throw new UnknownRoomError("Unknown room");
         s.roomId = i.roomId;
       }

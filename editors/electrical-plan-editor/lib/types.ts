@@ -16,7 +16,12 @@ export type {
   Position,
 } from "document-models/electrical-plan/v1";
 
-export type CircuitKind = "lighting" | "sockets" | "appliance" | "hvac" | "other";
+export type CircuitKind =
+  | "lighting"
+  | "sockets"
+  | "appliance"
+  | "hvac"
+  | "other";
 export type ElectricalCategoryId =
   | "distribution"
   | "outlet"
@@ -29,13 +34,53 @@ export type ElectricalCategoryId =
   | "knx"
   | "other";
 export type ElectricalMount = "wall" | "ceiling" | "floor" | "din";
-export interface SymbolPoint { x: number; y: number; }
+export interface SymbolPoint {
+  x: number;
+  y: number;
+}
 export type SymbolPart =
-  | { kind: "line"; points: SymbolPoint[]; closed?: boolean; fill?: boolean; stroke?: boolean }
-  | { kind: "circle"; cx: number; cy: number; r: number; fill?: boolean; stroke?: boolean }
-  | { kind: "arc"; cx: number; cy: number; r: number; start: number; end: number; stroke?: boolean; fill?: boolean }
-  | { kind: "rect"; x: number; y: number; w: number; h: number; fill?: boolean; stroke?: boolean }
-  | { kind: "text"; x: number; y: number; text: string; size?: number; weight?: "normal" | "bold" };
+  | {
+      kind: "line";
+      points: SymbolPoint[];
+      closed?: boolean;
+      fill?: boolean;
+      stroke?: boolean;
+    }
+  | {
+      kind: "circle";
+      cx: number;
+      cy: number;
+      r: number;
+      fill?: boolean;
+      stroke?: boolean;
+    }
+  | {
+      kind: "arc";
+      cx: number;
+      cy: number;
+      r: number;
+      start: number;
+      end: number;
+      stroke?: boolean;
+      fill?: boolean;
+    }
+  | {
+      kind: "rect";
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      fill?: boolean;
+      stroke?: boolean;
+    }
+  | {
+      kind: "text";
+      x: number;
+      y: number;
+      text: string;
+      size?: number;
+      weight?: "normal" | "bold";
+    };
 
 export interface ElectricalKnxFunction {
   key: string;

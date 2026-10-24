@@ -15,9 +15,7 @@ export const electricalPlanCabinetKnxProtocolOperations: ElectricalPlanCabinetKn
         throw new DuplicateIdError("Distribution board id already exists");
       const d = action.input.distributor;
       if (!d.name.trim())
-        throw new InvalidDistributorError(
-          "A distribution board needs a name",
-        );
+        throw new InvalidDistributorError("A distribution board needs a name");
       if (!Number.isInteger(d.rows) || d.rows < 1)
         throw new InvalidDistributorError("Rows must be a positive integer");
       if (!Number.isInteger(d.tePerRow) || d.tePerRow < 1)
@@ -50,9 +48,7 @@ export const electricalPlanCabinetKnxProtocolOperations: ElectricalPlanCabinetKn
       }
       if (i.rows !== undefined && i.rows !== null) {
         if (!Number.isInteger(i.rows) || i.rows < 1)
-          throw new InvalidDistributorError(
-            "Rows must be a positive integer",
-          );
+          throw new InvalidDistributorError("Rows must be a positive integer");
         d.rows = i.rows;
       }
       if (i.tePerRow !== undefined && i.tePerRow !== null) {

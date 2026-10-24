@@ -1,0 +1,28 @@
+{
+  "name": "planvolt",
+  "description": "Electrical planning package: installation plan, circuits, BOM, cabinet, KNX and inspection protocol.",
+  "category": "Engineering",
+  "publisher": {
+    "name": "Planvolt",
+    "url": "https://openplan3d.com"
+  },
+  "documentModels": [
+    {
+      "id": "planvolt/electrical-plan",
+      "name": "Electrical Plan"
+    }
+  ],
+  "apps": [],
+  "editors": [
+    {
+      "id": "electrical-plan-editor",
+      "name": "Electrical Plan Editor",
+      "documentTypes": [
+        "planvolt/electrical-plan"
+      ]
+    }
+  ],
+  "processors": [],
+  "subgraphs": [],
+  "config": []
+}

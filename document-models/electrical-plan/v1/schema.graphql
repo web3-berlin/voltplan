@@ -1,0 +1,394 @@
+scalar Unknown
+scalar DateTime
+scalar Address
+scalar AttachmentRef
+scalar Amount_Tokens
+scalar EthereumAddress
+scalar EmailAddress
+scalar Amount_Percentage
+scalar Date
+scalar URL
+scalar Amount_Money
+scalar OLabel
+scalar Currency
+scalar PHID
+scalar OID
+scalar Amount_Fiat
+scalar Amount_Currency
+scalar Amount_Crypto
+scalar Amount
+scalar Upload
+
+type ElectricalPlanState {
+  name: String!
+  activeUnitId: OID!
+  units: [ElectricalUnit!]!
+  circuits: [ElectricalCircuit!]!
+  routes: [CableRoute!]
+  distributors: [ElectricalDistributor!]!
+  cabinetDevices: [CabinetDevice!]!
+  groupAddresses: [GroupAddress!]!
+  reports: [InspectionReport!]!
+  settings: ElectricalSettings!
+  nextCircuitNumber: Int!
+}
+
+type ElectricalUnit {
+  id: OID!
+  name: String!
+  level: Int!
+  background: PlanBackground
+  rooms: [ElectricalRoom!]
+  symbols: [ElectricalSymbol!]!
+}
+
+type ElectricalRoom {
+  id: OID!
+  name: String!
+  points: [Position!]!
+  fillColor: String
+  labelX: Float!
+  labelY: Float!
+  locked: Boolean
+}
+
+type PlanBackground {
+  dataUrl: String
+  widthCm: Float
+  heightCm: Float
+  x: Float!
+  y: Float!
+  scale: Float!
+  opacity: Float!
+  rotation: Float!
+  locked: Boolean!
+}
+
+type Position {
+  x: Float!
+  y: Float!
+}
+
+type KnxBinding {
+  enabled: Boolean!
+  participantName: String
+  groupAddressIds: [OID!]
+}
+
+type ItemDetails {
+  note: String
+  price: Float
+  photos: [String!]
+}
+
+type ElectricalSymbol {
+  id: OID!
+  defId: String!
+  position: Position!
+  rotation: Float!
+  mountHeightCm: Float
+  circuitId: OID
+  roomId: String
+  label: String
+  color: String
+  locked: Boolean
+  knx: KnxBinding
+  details: ItemDetails
+}
+
+type ElectricalBreaker {
+  poles: Int!
+  ratingA: Float!
+  characteristic: String!
+  rcdMa: Int
+  rcbo: Boolean
+}
+
+type ElectricalCable {
+  type: String!
+  crossSectionMm2: Float!
+  lengthM: Float
+}
+
+type ElectricalCircuit {
+  id: OID!
+  skNumber: Int!
+  name: String!
+  kind: String!
+  distributorId: OID
+  breaker: ElectricalBreaker!
+  cable: ElectricalCable!
+  phases: [String!]
+  color: String
+  notes: String
+  installationMethod: String
+  ambientTempC: Float
+  groupedCircuits: Int
+}
+
+type CableRoute {
+  id: OID!
+  circuitId: OID!
+  unitId: OID!
+  points: [Position!]!
+  reservePercent: Float
+}
+
+type ElectricalDistributor {
+  id: OID!
+  name: String!
+  rows: Int!
+  tePerRow: Int!
+  reservePercent: Float!
+  location: String
+}
+
+type CabinetDevice {
+  id: OID!
+  distributorId: OID!
+  circuitId: OID
+  kind: String!
+  label: String!
+  teWidth: Int!
+  row: Int
+  startTe: Int
+  phases: [String!]
+  article: String
+  price: Float
+}
+
+type GroupAddress {
+  id: OID!
+  main: Int!
+  middle: Int!
+  sub: Int!
+  name: String!
+  dpt: String!
+  fixtureId: OID
+  functionKey: String
+  description: String
+}
+
+type InspectionReport {
+  id: OID!
+  circuitId: OID!
+  result: String!
+  rcdTripMs: Float
+  rcdTestCurrentMa: Float
+  insulationMohm: Float
+  insulationTestVoltageV: Int
+  continuityOhm: Float
+  loopImpedanceOhm: Float
+  rotatingField: String
+  visualInspection: String
+  tester: String
+  testedAt: String
+  nextTestDue: String
+  signature: String
+  notes: String
+}
+
+type ElectricalSettings {
+  symbolStyle: String!
+  showCircuitBadges: Boolean!
+  showMountHeights: Boolean!
+}
+
+input PositionInput {
+  x: Float!
+  y: Float!
+}
+
+input RoomInput {
+  id: OID!
+  name: String!
+  points: [PositionInput!]!
+  fillColor: String
+  labelX: Float!
+  labelY: Float!
+  locked: Boolean
+}
+
+input ElectricalSettingsInput {
+  symbolStyle: String
+  showCircuitBadges: Boolean
+  showMountHeights: Boolean
+}
+
+input SymbolInput {
+  id: OID!
+  defId: String!
+  knxEnabled: Boolean
+  position: PositionInput!
+  rotation: Float!
+  mountHeightCm: Float
+  circuitId: OID
+  roomId: String
+  label: String
+  color: String
+  locked: Boolean
+}
+
+input BreakerInput {
+  poles: Int!
+  ratingA: Float!
+  characteristic: String!
+  rcdMa: Int
+  rcbo: Boolean
+}
+
+input CableInput {
+  type: String!
+  crossSectionMm2: Float!
+  lengthM: Float
+}
+
+input CircuitInput {
+  id: OID!
+  skNumber: Int!
+  name: String!
+  kind: String!
+  distributorId: OID
+  breaker: BreakerInput!
+  cable: CableInput!
+  phases: [String!]
+  color: String
+  notes: String
+  installationMethod: String
+  ambientTempC: Float
+  groupedCircuits: Int
+}
+
+input CableRouteInput {
+  id: OID!
+  circuitId: OID!
+  unitId: OID!
+  points: [PositionInput!]!
+  reservePercent: Float
+}
+
+input DistributorInput {
+  id: OID!
+  name: String!
+  rows: Int!
+  tePerRow: Int!
+  reservePercent: Float!
+  location: String
+}
+
+input CabinetDeviceInput {
+  id: OID!
+  distributorId: OID!
+  circuitId: OID
+  kind: String!
+  label: String!
+  teWidth: Int!
+  row: Int
+  startTe: Int
+  phases: [String!]
+  article: String
+  price: Float
+}
+
+input GroupAddressInput {
+  id: OID!
+  main: Int!
+  middle: Int!
+  sub: Int!
+  name: String!
+  dpt: String!
+  fixtureId: OID
+  functionKey: String
+  description: String
+}
+
+input ReportInput {
+  id: OID!
+  circuitId: OID!
+  result: String!
+  rcdTripMs: Float
+  rcdTestCurrentMa: Float
+  insulationMohm: Float
+  insulationTestVoltageV: Int
+  continuityOhm: Float
+  loopImpedanceOhm: Float
+  rotatingField: String
+  visualInspection: String
+  tester: String
+  testedAt: String
+  nextTestDue: String
+  signature: String
+  notes: String
+}
+
+input BackgroundInput {
+  dataUrl: String
+  widthCm: Float
+  heightCm: Float
+  x: Float!
+  y: Float!
+  scale: Float!
+  opacity: Float!
+  rotation: Float!
+  locked: Boolean!
+}
+
+# installation-plan
+
+input AddUnitInput { id: OID! name: String! level: Int! }
+
+input RenameUnitInput { id: OID! name: String! }
+
+input AddRoomInput { unitId: OID! room: RoomInput! }
+
+input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }
+
+input RemoveRoomInput { unitId: OID! id: OID! }
+
+input AddSymbolInput { unitId: OID! symbol: SymbolInput! }
+
+input UpdateSymbolInput { unitId: OID! id: OID! defId: String circuitId: OID roomId: String label: String color: String rotation: Float mountHeightCm: Float locked: Boolean knxEnabled: Boolean }
+
+input UpdateSymbolDetailsInput { unitId: OID! id: OID! price: Float note: String }
+
+input MoveSymbolInput { unitId: OID! id: OID! x: Float! y: Float! }
+
+input RemoveSymbolInput { unitId: OID! id: OID! }
+
+input SetProjectNameInput { name: String! }
+
+input SetActiveUnitInput { unitId: OID! }
+
+input SetUnitBackgroundInput { unitId: OID! background: BackgroundInput }
+
+input UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }
+
+input UpdateSettingsInput { settings: ElectricalSettingsInput! }
+
+# circuits
+
+input AddCircuitInput { circuit: CircuitInput! }
+
+input UpdateCircuitInput { id: OID! name: String kind: String distributorId: OID color: String ratingA: Float characteristic: String poles: Int rcdMa: Int rcbo: Boolean phases: [String!] cableType: String crossSectionMm2: Float lengthM: Float notes: String installationMethod: String ambientTempC: Float groupedCircuits: Int }
+
+input RemoveCircuitInput { id: OID! }
+
+input AssignSymbolCircuitInput { unitId: OID! symbolId: OID! circuitId: OID }
+
+input AddRouteInput { route: CableRouteInput! }
+
+input UpdateRouteInput { id: OID! circuitId: OID unitId: OID points: [PositionInput!] reservePercent: Float }
+
+input RemoveRouteInput { id: OID! }
+
+# cabinet-knx-protocol
+
+input AddDistributorInput { distributor: DistributorInput! }
+
+input UpdateDistributorInput { id: OID! name: String rows: Int tePerRow: Int reservePercent: Float location: String }
+
+input PlanCabinetInput { distributorId: OID! devices: [CabinetDeviceInput!]! }
+
+input SetGroupAddressesInput { addresses: [GroupAddressInput!]! }
+
+input UpdateReportInput { report: ReportInput! }

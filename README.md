@@ -4,6 +4,8 @@ Planvolt is a Powerhouse document-model package for electrical planning. It turn
 
 The package is built as a Powerhouse document model plus a React editor, so it runs in Connect and can be consumed by reactors, processors and subgraphs the same way as other Powerhouse packages.
 
+![Planvolt installation plan editor with DIN symbol library, circuit badges and rooms; personal title-block data is redacted](docs/screenshots/plan.webp)
+
 ## Screenshots
 
 | Circuits & cable sizing | Bill of materials |

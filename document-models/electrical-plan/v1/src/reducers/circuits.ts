@@ -25,8 +25,10 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         throw new InvalidCircuitError(
           "Circuit number must be a positive integer",
         );
-      if (!c.name.trim()) throw new InvalidCircuitError("A circuit needs a name");
-      if (!c.kind.trim()) throw new InvalidCircuitError("A circuit needs a kind");
+      if (!c.name.trim())
+        throw new InvalidCircuitError("A circuit needs a name");
+      if (!c.kind.trim())
+        throw new InvalidCircuitError("A circuit needs a kind");
       if (!c.breaker.characteristic.trim())
         throw new InvalidCircuitError("A breaker needs a characteristic");
       if (
@@ -52,20 +54,14 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         !Number.isFinite(c.cable.crossSectionMm2) ||
         c.cable.crossSectionMm2 <= 0
       )
-        throw new InvalidCircuitError(
-          "Cable cross-section must be positive",
-        );
+        throw new InvalidCircuitError("Cable cross-section must be positive");
       if (
         c.cable.lengthM != null &&
         (!Number.isFinite(c.cable.lengthM) || c.cable.lengthM < 0)
       )
-        throw new InvalidCircuitError(
-          "Cable length must be non-negative",
-        );
+        throw new InvalidCircuitError("Cable length must be non-negative");
       if (c.ambientTempC != null && !Number.isFinite(c.ambientTempC))
-        throw new InvalidCircuitError(
-          "Ambient temperature must be finite",
-        );
+        throw new InvalidCircuitError("Ambient temperature must be finite");
       if (
         c.groupedCircuits != null &&
         (!Number.isInteger(c.groupedCircuits) || c.groupedCircuits < 1)
@@ -139,24 +135,18 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
       }
       if (i.characteristic != null) {
         if (!i.characteristic.trim())
-          throw new InvalidCircuitError(
-            "A breaker needs a characteristic",
-          );
+          throw new InvalidCircuitError("A breaker needs a characteristic");
         c.breaker.characteristic = i.characteristic;
       }
       if (i.poles != null) {
         if (!Number.isInteger(i.poles) || i.poles < 1 || i.poles > 3)
-          throw new InvalidCircuitError(
-            "Breaker poles must be 1, 2 or 3",
-          );
+          throw new InvalidCircuitError("Breaker poles must be 1, 2 or 3");
         c.breaker.poles = i.poles;
       }
       if (i.rcdMa !== undefined) {
         if (
           i.rcdMa != null &&
-          (!Number.isFinite(i.rcdMa) ||
-            i.rcdMa < 0 ||
-            i.rcdMa > 300)
+          (!Number.isFinite(i.rcdMa) || i.rcdMa < 0 || i.rcdMa > 300)
         )
           throw new InvalidCircuitError(
             "RCD rating must be between 0 and 300 mA",
@@ -170,23 +160,13 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         c.cable.type = i.cableType;
       }
       if (i.crossSectionMm2 != null) {
-        if (
-          !Number.isFinite(i.crossSectionMm2) ||
-          i.crossSectionMm2 <= 0
-        )
-          throw new InvalidCircuitError(
-            "Cable cross-section must be positive",
-          );
+        if (!Number.isFinite(i.crossSectionMm2) || i.crossSectionMm2 <= 0)
+          throw new InvalidCircuitError("Cable cross-section must be positive");
         c.cable.crossSectionMm2 = i.crossSectionMm2;
       }
       if (i.lengthM !== undefined) {
-        if (
-          i.lengthM != null &&
-          (!Number.isFinite(i.lengthM) || i.lengthM < 0)
-        )
-          throw new InvalidCircuitError(
-            "Cable length must be non-negative",
-          );
+        if (i.lengthM != null && (!Number.isFinite(i.lengthM) || i.lengthM < 0))
+          throw new InvalidCircuitError("Cable length must be non-negative");
         c.cable.lengthM = i.lengthM;
       }
       if (i.notes !== undefined) c.notes = i.notes;
@@ -194,16 +174,13 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         c.installationMethod = i.installationMethod;
       if (i.ambientTempC !== undefined) {
         if (i.ambientTempC != null && !Number.isFinite(i.ambientTempC))
-          throw new InvalidCircuitError(
-            "Ambient temperature must be finite",
-          );
+          throw new InvalidCircuitError("Ambient temperature must be finite");
         c.ambientTempC = i.ambientTempC;
       }
       if (i.groupedCircuits !== undefined) {
         if (
           i.groupedCircuits != null &&
-          (!Number.isInteger(i.groupedCircuits) ||
-            i.groupedCircuits < 1)
+          (!Number.isInteger(i.groupedCircuits) || i.groupedCircuits < 1)
         )
           throw new InvalidCircuitError(
             "Grouped circuits must be a positive integer",
@@ -246,10 +223,12 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         throw new UnknownCircuitError("Unknown circuit");
       if (!state.units.some((u) => u.id === r.unitId))
         throw new UnknownUnitError("Unknown unit");
-      if (!r.points || r.points.length < 2)
+      const points = (r as { points?: readonly { x: number; y: number }[] })
+        .points;
+      if (!points || points.length < 2)
         throw new InvalidRouteError("A route needs at least two points");
       if (
-        !r.points.every(
+        !points.every(
           (point) => Number.isFinite(point.x) && Number.isFinite(point.y),
         )
       )
@@ -266,7 +245,7 @@ export const electricalPlanCircuitsOperations: ElectricalPlanCircuitsOperations 
         id: r.id,
         circuitId: r.circuitId,
         unitId: r.unitId,
-        points: r.points.map((point) => ({ x: point.x, y: point.y })),
+        points: points.map((point) => ({ x: point.x, y: point.y })),
         reservePercent: r.reservePercent ?? 10,
       });
     },

@@ -1,6 +1,7 @@
 {
   "name": "planvolt",
   "version": "1.0.0",
+  "description": "Electrical planning for Powerhouse: DIN 18015 installation plan, circuits, BOM, cabinet layout, KNX and inspection protocol.",
   "license": "AGPL-3.0-only",
   "files": [
     "/dist"
@@ -15,7 +16,8 @@
     },
     "./reactor": {
       "types": "./dist/types/reactor/index.d.ts",
-      "browser": "./dist/browser/reactor/index.js"
+      "browser": "./dist/browser/reactor/index.js",
+      "node": "./dist/node/index.mjs"
     },
     "./document-models": {
       "types": "./dist/types/document-models/index.d.ts",
@@ -33,9 +35,9 @@
       "node": "./dist/node/editors/index.mjs"
     },
     "./editors/*": {
-      "types": "./dist/types/editors/*/editor.d.ts",
-      "browser": "./dist/browser/editors/*/editor.js",
-      "node": "./dist/node/editors/*/editor.mjs"
+      "types": "./dist/types/editors/*/module.d.ts",
+      "browser": "./dist/browser/editors/*/module.js",
+      "node": "./dist/node/editors/*/module.mjs"
     },
     "./subgraphs": {
       "types": "./dist/types/subgraphs/index.d.ts",
@@ -46,14 +48,6 @@
       "types": "./dist/types/processors/index.d.ts",
       "browser": "./dist/browser/processors/index.js",
       "node": "./dist/node/processors/index.mjs"
-    },
-    "./pieces": {
-      "types": "./dist/types/pieces/index.d.ts",
-      "node": "./dist/node/pieces/index.mjs"
-    },
-    "./pieces/*": {
-      "types": "./dist/types/pieces/*/index.d.ts",
-      "node": "./dist/node/pieces/*/index.mjs"
     },
     "./manifest": "./dist/powerhouse.manifest.json",
     "./style.css": "./dist/style.css"
@@ -77,6 +71,9 @@
     "vetra": "ph-cli vetra",
     "service-startup": "bash ./node_modules/@powerhousedao/ph-cli/dist/scripts/service-startup.sh",
     "service-unstartup": "bash ./node_modules/@powerhousedao/ph-cli/dist/scripts/service-unstartup.sh"
+  },
+  "dependencies": {
+    "pdfjs-dist": "4.8.69"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.3.15",
@@ -123,9 +120,5 @@
     "**/date-fns": "4.3.0",
     "**/rolldown": "1.0.2",
     "**/vite": "8.0.14"
-  },
-  "dependencies": {
-    "pdfjs-dist": "4.8.69"
-  },
-  "description": "Electrical planning for Powerhouse: DIN 18015 installation plan, circuits, BOM, cabinet layout, KNX and inspection protocol."
+  }
 }

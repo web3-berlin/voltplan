@@ -87,27 +87,27 @@
               "description": "Add a room polygon",
               "schema": "input AddRoomInput { unitId: OID! room: RoomInput! }",
               "template": "",
-              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst r = action.input.room;\nif (!r.name.trim()) throw new InvalidRoomError(\"A room needs a name\");\nif (r.points.length < 3) throw new InvalidRoomError(\"A room needs at least three points\");\nu.rooms = u.rooms ?? [];\nif (u.rooms.some((x) => x.id === r.id)) throw new DuplicateIdError(\"Room id already exists\");\nu.rooms.push({\n  id: r.id,\n  name: r.name.trim(),\n  points: r.points.map((point) => ({ x: point.x, y: point.y })),\n  fillColor: r.fillColor ?? null,\n  labelX: r.labelX,\n  labelY: r.labelY,\n  locked: r.locked ?? null,\n});",
+              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst r = action.input.room;\nif (!r.name.trim()) throw new InvalidRoomError(\"A room needs a name\");\nif (r.points.length < 3)\n  throw new InvalidRoomError(\"A room needs at least three points\");\nif (!r.points.every((point) => Number.isFinite(point.x) && Number.isFinite(point.y)))\n  throw new InvalidRoomError(\"Room points must be finite\");\nu.rooms = u.rooms ?? [];\nif (u.rooms.some((x) => x.id === r.id))\n  throw new DuplicateIdError(\"Room id already exists\");\nu.rooms.push({\n  id: r.id,\n  name: r.name.trim(),\n  points: r.points.map((point) => ({ x: point.x, y: point.y })),\n  fillColor: r.fillColor ?? null,\n  labelX: r.labelX,\n  labelY: r.labelY,\n  locked: r.locked ?? null,\n});",
               "errors": [
                 {
-                  "id": "1f5e6dc5-a6ac-4825-b6e6-111acaeac3c5",
+                  "id": "4c4de3f7-c1b5-488c-9e5f-c7efbe734fb5",
                   "code": "UNKNOWN_UNIT",
                   "name": "UnknownUnitError",
                   "description": "The unit does not exist",
                   "template": ""
                 },
                 {
-                  "id": "e8d4ee6e-041f-427c-ba15-6326b49ded81",
+                  "id": "276f0b36-7243-463c-bfd3-66dd75e0bd9e",
                   "code": "DUPLICATE_ID",
                   "name": "DuplicateIdError",
-                  "description": "The id is already in use",
+                  "description": "The room id is already in use",
                   "template": ""
                 },
                 {
-                  "id": "acac2d07-6b1c-4b51-b56d-26ae57b517a5",
+                  "id": "49ca19fa-259b-463e-9c5c-8620b9ed76a9",
                   "code": "INVALID_ROOM",
                   "name": "InvalidRoomError",
-                  "description": "The room is invalid",
+                  "description": "The room name or points are invalid",
                   "template": ""
                 }
               ],
@@ -120,27 +120,27 @@
               "description": "Rename, recolour, reshape, relabel or lock a room",
               "schema": "input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }",
               "template": "",
-              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst r = (u.rooms ?? []).find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRoomError(\"Unknown room\");\nconst i = action.input;\nif (i.name != null) {\n  if (!i.name.trim()) throw new InvalidRoomError(\"A room needs a name\");\n  r.name = i.name.trim();\n}\nif (i.fillColor !== undefined) r.fillColor = i.fillColor;\nif (i.points != null) r.points = i.points.map((point) => ({ x: point.x, y: point.y }));\nif (i.labelX !== undefined && i.labelX !== null) r.labelX = i.labelX;\nif (i.labelY !== undefined && i.labelY !== null) r.labelY = i.labelY;\nif (i.locked !== undefined) r.locked = i.locked;",
+              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst r = (u.rooms ?? []).find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRoomError(\"Unknown room\");\nconst i = action.input;\nif (i.name != null) {\n  if (!i.name.trim()) throw new InvalidRoomError(\"A room needs a name\");\n  r.name = i.name.trim();\n}\nif (i.fillColor !== undefined) r.fillColor = i.fillColor;\nif (i.points != null) {\n  if (i.points.length < 3)\n    throw new InvalidRoomError(\"A room needs at least three points\");\n  if (!i.points.every((point) => Number.isFinite(point.x) && Number.isFinite(point.y)))\n    throw new InvalidRoomError(\"Room points must be finite\");\n  r.points = i.points.map((point) => ({ x: point.x, y: point.y }));\n}\nif (i.labelX !== undefined && i.labelX !== null) r.labelX = i.labelX;\nif (i.labelY !== undefined && i.labelY !== null) r.labelY = i.labelY;\nif (i.locked !== undefined) r.locked = i.locked;",
               "errors": [
                 {
-                  "id": "d1d8438b-dc4b-449c-9482-cdd57eab210c",
+                  "id": "42d3c50e-006b-4987-8488-71e9715563f9",
                   "code": "UNKNOWN_UNIT",
                   "name": "UnknownUnitError",
                   "description": "The unit does not exist",
                   "template": ""
                 },
                 {
-                  "id": "0d5e60ed-c1c6-42ad-81f5-60b780bb012a",
+                  "id": "7aec0ac8-0c20-4f5f-93b1-f1f36906f1fb",
                   "code": "UNKNOWN_ROOM",
                   "name": "UnknownRoomError",
                   "description": "The room does not exist",
                   "template": ""
                 },
                 {
-                  "id": "9fad0c16-5daf-4978-8b18-877dcc5a6cdf",
+                  "id": "b90412b2-2489-48ac-b331-2967b9f807b8",
                   "code": "INVALID_ROOM",
                   "name": "InvalidRoomError",
-                  "description": "The room is invalid",
+                  "description": "The room name or points are invalid",
                   "template": ""
                 }
               ],
@@ -179,20 +179,34 @@
               "description": "Place a DIN 18015 symbol",
               "schema": "input AddSymbolInput { unitId: OID! symbol: SymbolInput! }",
               "template": "",
-              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nif (\n  state.units.some((x) =>\n    x.symbols.some((s) => s.id === action.input.symbol.id),\n  )\n)\n  throw new DuplicateIdError(\"Symbol id already exists\");\nconst symbol = action.input.symbol;\nu.symbols.push({\n  ...symbol,\n  circuitId: symbol.circuitId ?? null,\n  color: symbol.color ?? null,\n  label: symbol.label ?? null,\n  locked: symbol.locked ?? null,\n  mountHeightCm: symbol.mountHeightCm ?? null,\n  roomId: symbol.roomId ?? null,\n  details: null,\n  knx: symbol.knxEnabled ? { enabled: true, groupAddressIds: [], participantName: null } : null,\n});",
+              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nif (\n  state.units.some((x) =>\n    x.symbols.some((s) => s.id === action.input.symbol.id),\n  )\n)\n  throw new DuplicateIdError(\"Symbol id already exists\");\nconst symbol = action.input.symbol;\nif (\n  symbol.circuitId != null &&\n  __omp_shell(\"state.circuits.some((c) => c.id === symbol.circuitId)\")\n)\n  throw new UnknownCircuitError(\"Unknown circuit\");\nif (\n  symbol.roomId != null &&\n  __omp_shell(\"(u.rooms ?? []).some((r) => r.id === symbol.roomId)\")\n)\n  throw new UnknownRoomError(\"Unknown room\");\nu.symbols.push({\n  id: symbol.id,\n  defId: symbol.defId,\n  position: { x: symbol.position.x, y: symbol.position.y },\n  rotation: symbol.rotation,\n  mountHeightCm: symbol.mountHeightCm ?? null,\n  label: symbol.label ?? null,\n  color: symbol.color ?? null,\n  locked: symbol.locked ?? null,\n  circuitId: symbol.circuitId ?? null,\n  roomId: symbol.roomId ?? null,\n  details: null,\n  knx: symbol.knxEnabled\n    ? { enabled: true, groupAddressIds: [], participantName: null }\n    : null,\n});",
               "errors": [
                 {
-                  "id": "196311c9-d84d-4860-be11-1a40f19b95a8",
+                  "id": "f49f6f73-1362-4a5f-b863-6cba6d2b6b3c",
                   "code": "UNKNOWN_UNIT",
                   "name": "UnknownUnitError",
                   "description": "The unit does not exist",
                   "template": ""
                 },
                 {
-                  "id": "d1f23220-e4be-4a89-89d4-656e21ae3696",
+                  "id": "14ed02c5-055e-4953-b9ab-9f94b76da7f1",
                   "code": "DUPLICATE_ID",
                   "name": "DuplicateIdError",
-                  "description": "The id is already in use",
+                  "description": "The symbol id is already in use",
+                  "template": ""
+                },
+                {
+                  "id": "a3ed4754-7f47-4ba7-87a5-cc2376f83cc2",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "4c48d684-a750-491c-8b9d-f311a535acfd",
+                  "code": "UNKNOWN_ROOM",
+                  "name": "UnknownRoomError",
+                  "description": "The room does not exist",
                   "template": ""
                 }
               ],
@@ -205,20 +219,34 @@
               "description": "Change a placed symbol",
               "schema": "input UpdateSymbolInput { unitId: OID! id: OID! defId: String circuitId: OID roomId: String label: String color: String rotation: Float mountHeightCm: Float locked: Boolean knxEnabled: Boolean }",
               "template": "",
-              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst s = u.symbols.find((x) => x.id === action.input.id);\nif (!s) throw new UnknownSymbolError(\"Unknown symbol\");\nconst i = action.input;\nif (i.defId !== undefined && i.defId !== null) s.defId = i.defId;\nif (i.circuitId !== undefined) s.circuitId = i.circuitId;\nif (i.roomId !== undefined) s.roomId = i.roomId;\nif (i.label !== undefined) s.label = i.label;\nif (i.color !== undefined) s.color = i.color;\nif (i.rotation !== undefined && i.rotation !== null)\n  s.rotation = i.rotation;\nif (i.mountHeightCm !== undefined) s.mountHeightCm = i.mountHeightCm;\nif (i.locked !== undefined && i.locked !== null) s.locked = i.locked;\nif (i.knxEnabled !== undefined && i.knxEnabled !== null) {\n  s.knx = {\n    enabled: i.knxEnabled,\n    groupAddressIds: i.knxEnabled ? (s.knx?.groupAddressIds ?? []) : [],\n    participantName: s.knx?.participantName ?? null,\n  };\n  if (!i.knxEnabled)\n    state.groupAddresses = state.groupAddresses.filter(\n      (address) => address.fixtureId !== s.id,\n    );\n}",
+              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nconst s = u.symbols.find((x) => x.id === action.input.id);\nif (!s) throw new UnknownSymbolError(\"Unknown symbol\");\nconst i = action.input;\nif (i.defId !== undefined && i.defId !== null) s.defId = i.defId;\nif (i.circuitId !== undefined) {\n  if (\n    i.circuitId != null &&\n    __omp_shell(\"state.circuits.some((c) => c.id === i.circuitId)\")\n  )\n    throw new UnknownCircuitError(\"Unknown circuit\");\n  s.circuitId = i.circuitId;\n}\nif (i.roomId !== undefined) {\n  if (\n    i.roomId != null &&\n    __omp_shell(\"(u.rooms ?? []).some((r) => r.id === i.roomId)\")\n  )\n    throw new UnknownRoomError(\"Unknown room\");\n  s.roomId = i.roomId;\n}\nif (i.label !== undefined) s.label = i.label;\nif (i.color !== undefined) s.color = i.color;\nif (i.rotation !== undefined && i.rotation !== null)\n  s.rotation = i.rotation;\nif (i.mountHeightCm !== undefined) s.mountHeightCm = i.mountHeightCm;\nif (i.locked !== undefined && i.locked !== null) s.locked = i.locked;\nif (i.knxEnabled !== undefined && i.knxEnabled !== null) {\n  s.knx = {\n    enabled: i.knxEnabled,\n    groupAddressIds: i.knxEnabled ? (s.knx?.groupAddressIds ?? []) : [],\n    participantName: s.knx?.participantName ?? null,\n  };\n  if (!i.knxEnabled)\n    state.groupAddresses = state.groupAddresses.filter(\n      (address) => address.fixtureId !== s.id,\n    );\n}",
               "errors": [
                 {
-                  "id": "626bb5ee-57a4-40c9-92c3-4fe52b684508",
+                  "id": "309453c1-3fb4-42a4-b812-17e0ec018b4c",
                   "code": "UNKNOWN_UNIT",
                   "name": "UnknownUnitError",
                   "description": "The unit does not exist",
                   "template": ""
                 },
                 {
-                  "id": "53487862-6ff2-4f67-9a5d-5adaa4d50af6",
+                  "id": "f1f532ee-de4e-48bb-9452-833fd1b34e13",
                   "code": "UNKNOWN_SYMBOL",
                   "name": "UnknownSymbolError",
                   "description": "The symbol does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "d42745a3-c749-48d1-932d-78643456d952",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "ba798623-8a78-41eb-a206-739a897f042a",
+                  "code": "UNKNOWN_ROOM",
+                  "name": "UnknownRoomError",
+                  "description": "The room does not exist",
                   "template": ""
                 }
               ],
@@ -283,13 +311,20 @@
               "description": "Remove a placed symbol",
               "schema": "input RemoveSymbolInput { unitId: OID! id: OID! }",
               "template": "",
-              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nu.symbols = u.symbols.filter((s) => s.id !== action.input.id);\nstate.groupAddresses = state.groupAddresses.filter(\n  (ga) => ga.fixtureId !== action.input.id,\n);",
+              "reducer": "const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError(\"Unknown unit\");\nif (!u.symbols.some((s) => s.id === action.input.id))\n  throw new UnknownSymbolError(\"Unknown symbol\");\nu.symbols = u.symbols.filter((s) => s.id !== action.input.id);\nstate.groupAddresses = state.groupAddresses.filter(\n  (ga) => ga.fixtureId !== action.input.id,\n);",
               "errors": [
                 {
-                  "id": "c5cc2305-8313-4ddb-95e0-f495d924177d",
+                  "id": "10cc80de-b5e4-4129-9324-9a06a604c441",
                   "code": "UNKNOWN_UNIT",
                   "name": "UnknownUnitError",
                   "description": "The unit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "57fc9345-99c0-4ce2-bcf0-be6176bcf8d7",
+                  "code": "UNKNOWN_SYMBOL",
+                  "name": "UnknownSymbolError",
+                  "description": "The symbol does not exist",
                   "template": ""
                 }
               ],
@@ -396,20 +431,34 @@
               "description": "Add a circuit to the topology",
               "schema": "input AddCircuitInput { circuit: CircuitInput! }",
               "template": "",
-              "reducer": "if (state.circuits.some((c) => c.id === action.input.circuit.id))\n  throw new DuplicateIdError(\"Circuit id already exists\");\nif (\n  state.circuits.some((c) => c.skNumber === action.input.circuit.skNumber)\n)\n  throw new DuplicateCircuitNumberError(\"Circuit number already exists\");\nconst c = action.input.circuit;\nstate.circuits.push({\n  id: c.id,\n  skNumber: c.skNumber,\n  name: c.name,\n  kind: c.kind,\n  distributorId: c.distributorId ?? null,\n  color: c.color ?? null,\n  notes: c.notes ?? null,\n  phases: c.phases ?? null,\n  breaker: {\n    characteristic: c.breaker.characteristic,\n    poles: c.breaker.poles,\n    ratingA: c.breaker.ratingA,\n    rcbo: c.breaker.rcbo ?? false,\n    rcdMa: c.breaker.rcdMa ?? null,\n  },\n  cable: {\n    type: c.cable.type,\n    crossSectionMm2: c.cable.crossSectionMm2,\n    lengthM: c.cable.lengthM ?? null,\n  },\n  installationMethod: c.installationMethod ?? \"B2\",\n  ambientTempC: c.ambientTempC ?? 30,\n  groupedCircuits: c.groupedCircuits ?? 1,\n});\nstate.nextCircuitNumber = Math.max(\n  state.nextCircuitNumber,\n  c.skNumber + 1,\n);",
+              "reducer": "if (state.circuits.some((c) => c.id === action.input.circuit.id))\n  throw new DuplicateIdError(\"Circuit id already exists\");\nif (\n  state.circuits.some((c) => c.skNumber === action.input.circuit.skNumber)\n)\n  throw new DuplicateCircuitNumberError(\"Circuit number already exists\");\nconst c = action.input.circuit;\nif (!Number.isInteger(c.skNumber) || c.skNumber < 1)\n  throw new InvalidCircuitError(\"Circuit number must be a positive integer\");\nif (!c.name.trim()) throw new InvalidCircuitError(\"A circuit needs a name\");\nif (!c.kind.trim()) throw new InvalidCircuitError(\"A circuit needs a kind\");\nif (!c.breaker.characteristic.trim())\n  throw new InvalidCircuitError(\"A breaker needs a characteristic\");\nif (!Number.isInteger(c.breaker.poles) || c.breaker.poles < 1 || c.breaker.poles > 3)\n  throw new InvalidCircuitError(\"Breaker poles must be 1, 2 or 3\");\nif (!Number.isFinite(c.breaker.ratingA) || c.breaker.ratingA <= 0)\n  throw new InvalidCircuitError(\"Breaker rating must be positive\");\nif (\n  c.breaker.rcdMa != null &&\n  (!Number.isFinite(c.breaker.rcdMa) ||\n    c.breaker.rcdMa < 0 ||\n    c.breaker.rcdMa > 300)\n)\n  throw new InvalidCircuitError(\"RCD rating must be between 0 and 300 mA\");\nif (!c.cable.type.trim()) throw new InvalidCircuitError(\"A cable needs a type\");\nif (!Number.isFinite(c.cable.crossSectionMm2) || c.cable.crossSectionMm2 <= 0)\n  throw new InvalidCircuitError(\"Cable cross-section must be positive\");\nif (\n  c.cable.lengthM != null &&\n  (!Number.isFinite(c.cable.lengthM) || c.cable.lengthM < 0)\n)\n  throw new InvalidCircuitError(\"Cable length must be non-negative\");\nif (c.ambientTempC != null && !Number.isFinite(c.ambientTempC))\n  throw new InvalidCircuitError(\"Ambient temperature must be finite\");\nif (\n  c.groupedCircuits != null &&\n  (!Number.isInteger(c.groupedCircuits) || c.groupedCircuits < 1)\n)\n  throw new InvalidCircuitError(\"Grouped circuits must be a positive integer\");\nif (\n  c.distributorId != null &&\n  __omp_shell(\"state.distributors.some((d) => d.id === c.distributorId)\")\n)\n  throw new UnknownDistributorError(\"Unknown distribution board\");\nstate.circuits.push({\n  id: c.id,\n  skNumber: c.skNumber,\n  name: c.name,\n  kind: c.kind,\n  distributorId: c.distributorId ?? null,\n  color: c.color ?? null,\n  notes: c.notes ?? null,\n  phases: c.phases ?? null,\n  breaker: {\n    characteristic: c.breaker.characteristic,\n    poles: c.breaker.poles,\n    ratingA: c.breaker.ratingA,\n    rcbo: c.breaker.rcbo ?? false,\n    rcdMa: c.breaker.rcdMa ?? null,\n  },\n  cable: {\n    type: c.cable.type,\n    crossSectionMm2: c.cable.crossSectionMm2,\n    lengthM: c.cable.lengthM ?? null,\n  },\n  installationMethod: c.installationMethod ?? \"B2\",\n  ambientTempC: c.ambientTempC ?? 30,\n  groupedCircuits: c.groupedCircuits ?? 1,\n});\nstate.nextCircuitNumber = Math.max(\n  state.nextCircuitNumber,\n  c.skNumber + 1,\n);",
               "errors": [
                 {
-                  "id": "1590b0f5-8221-4eed-9099-3da00eb0f240",
+                  "id": "c64733ae-404f-45ce-9bf1-96645faf37bc",
                   "code": "DUPLICATE_ID",
                   "name": "DuplicateIdError",
-                  "description": "The id is already in use",
+                  "description": "The circuit id is already in use",
                   "template": ""
                 },
                 {
-                  "id": "335d402d-5c13-4722-87fe-d78b11308226",
+                  "id": "583048fe-b574-4caa-98cd-39fb3551c4fa",
                   "code": "DUPLICATE_SK",
                   "name": "DuplicateCircuitNumberError",
                   "description": "The circuit number is already in use",
+                  "template": ""
+                },
+                {
+                  "id": "89abc309-931b-417a-beff-35cb6f10eb79",
+                  "code": "INVALID_CIRCUIT",
+                  "name": "InvalidCircuitError",
+                  "description": "Circuit fields are invalid",
+                  "template": ""
+                },
+                {
+                  "id": "68abe8be-b96c-48fe-ba25-85fc56b2b753",
+                  "code": "UNKNOWN_DISTRIBUTOR",
+                  "name": "UnknownDistributorError",
+                  "description": "The distribution board does not exist",
                   "template": ""
                 }
               ],
@@ -422,13 +471,27 @@
               "description": "Update a circuit",
               "schema": "input UpdateCircuitInput { id: OID! name: String kind: String distributorId: OID color: String ratingA: Float characteristic: String poles: Int rcdMa: Int rcbo: Boolean phases: [String!] cableType: String crossSectionMm2: Float lengthM: Float notes: String installationMethod: String ambientTempC: Float groupedCircuits: Int }",
               "template": "",
-              "reducer": "const c = state.circuits.find((x) => x.id === action.input.id);\nif (!c) throw new UnknownCircuitError(\"Unknown circuit\");\nconst i = action.input;\nif (i.name != null) c.name = i.name;\nif (i.kind != null) c.kind = i.kind;\nif (i.color !== undefined) c.color = i.color;\nif (i.phases !== undefined) c.phases = i.phases;\nif (i.rcbo !== undefined && i.rcbo !== null) c.breaker.rcbo = i.rcbo;\nif (i.distributorId !== undefined) c.distributorId = i.distributorId;\nif (i.ratingA != null) c.breaker.ratingA = i.ratingA;\nif (i.characteristic != null)\n  c.breaker.characteristic = i.characteristic;\nif (i.poles != null) c.breaker.poles = i.poles;\nif (i.rcdMa !== undefined) c.breaker.rcdMa = i.rcdMa;\nif (i.cableType != null) c.cable.type = i.cableType;\nif (i.crossSectionMm2 != null)\n  c.cable.crossSectionMm2 = i.crossSectionMm2;\nif (i.lengthM !== undefined) c.cable.lengthM = i.lengthM;\nif (i.notes !== undefined) c.notes = i.notes;\nif (i.installationMethod !== undefined) c.installationMethod = i.installationMethod;\nif (i.ambientTempC !== undefined) c.ambientTempC = i.ambientTempC;\nif (i.groupedCircuits !== undefined) c.groupedCircuits = i.groupedCircuits;",
+              "reducer": "const c = state.circuits.find((x) => x.id === action.input.id);\nif (!c) throw new UnknownCircuitError(\"Unknown circuit\");\nconst i = action.input;\nif (i.name != null) {\n  if (!i.name.trim()) throw new InvalidCircuitError(\"A circuit needs a name\");\n  c.name = i.name;\n}\nif (i.kind != null) {\n  if (!i.kind.trim()) throw new InvalidCircuitError(\"A circuit needs a kind\");\n  c.kind = i.kind;\n}\nif (i.color !== undefined) c.color = i.color;\nif (i.phases !== undefined) c.phases = i.phases;\nif (i.distributorId !== undefined) {\n  if (\n    i.distributorId != null &&\n    __omp_shell(\"state.distributors.some((d) => d.id === i.distributorId)\")\n  )\n    throw new UnknownDistributorError(\"Unknown distribution board\");\n  c.distributorId = i.distributorId;\n}\nif (i.ratingA != null) {\n  if (!Number.isFinite(i.ratingA) || i.ratingA <= 0)\n    throw new InvalidCircuitError(\"Breaker rating must be positive\");\n  c.breaker.ratingA = i.ratingA;\n}\nif (i.characteristic != null) {\n  if (!i.characteristic.trim())\n    throw new InvalidCircuitError(\"A breaker needs a characteristic\");\n  c.breaker.characteristic = i.characteristic;\n}\nif (i.poles != null) {\n  if (!Number.isInteger(i.poles) || i.poles < 1 || i.poles > 3)\n    throw new InvalidCircuitError(\"Breaker poles must be 1, 2 or 3\");\n  c.breaker.poles = i.poles;\n}\nif (i.rcdMa !== undefined) {\n  if (\n    i.rcdMa != null &&\n    (!Number.isFinite(i.rcdMa) || i.rcdMa < 0 || i.rcdMa > 300)\n  )\n    throw new InvalidCircuitError(\"RCD rating must be between 0 and 300 mA\");\n  c.breaker.rcdMa = i.rcdMa;\n}\nif (i.rcbo !== undefined && i.rcbo !== null) c.breaker.rcbo = i.rcbo;\nif (i.cableType != null) {\n  if (!i.cableType.trim()) throw new InvalidCircuitError(\"A cable needs a type\");\n  c.cable.type = i.cableType;\n}\nif (i.crossSectionMm2 != null) {\n  if (!Number.isFinite(i.crossSectionMm2) || i.crossSectionMm2 <= 0)\n    throw new InvalidCircuitError(\"Cable cross-section must be positive\");\n  c.cable.crossSectionMm2 = i.crossSectionMm2;\n}\nif (i.lengthM !== undefined) {\n  if (i.lengthM != null && (!Number.isFinite(i.lengthM) || i.lengthM < 0))\n    throw new InvalidCircuitError(\"Cable length must be non-negative\");\n  c.cable.lengthM = i.lengthM;\n}\nif (i.notes !== undefined) c.notes = i.notes;\nif (i.installationMethod !== undefined)\n  c.installationMethod = i.installationMethod;\nif (i.ambientTempC !== undefined) {\n  if (i.ambientTempC != null && !Number.isFinite(i.ambientTempC))\n    throw new InvalidCircuitError(\"Ambient temperature must be finite\");\n  c.ambientTempC = i.ambientTempC;\n}\nif (i.groupedCircuits !== undefined) {\n  if (\n    i.groupedCircuits != null &&\n    (!Number.isInteger(i.groupedCircuits) || i.groupedCircuits < 1)\n  )\n    throw new InvalidCircuitError(\"Grouped circuits must be a positive integer\");\n  c.groupedCircuits = i.groupedCircuits;\n}",
               "errors": [
                 {
-                  "id": "d4efeb1c-7370-4b71-a14c-a2d98371df5a",
+                  "id": "b3c48627-1fe4-483a-8e24-ad0cc92d419d",
                   "code": "UNKNOWN_CIRCUIT",
                   "name": "UnknownCircuitError",
                   "description": "The circuit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "1a496a55-1033-49e8-a9a1-ff424839d3ed",
+                  "code": "INVALID_CIRCUIT",
+                  "name": "InvalidCircuitError",
+                  "description": "Circuit fields are invalid",
+                  "template": ""
+                },
+                {
+                  "id": "2037e86a-f664-4e0b-b77c-94dc16b0e1be",
+                  "code": "UNKNOWN_DISTRIBUTOR",
+                  "name": "UnknownDistributorError",
+                  "description": "The distribution board does not exist",
                   "template": ""
                 }
               ],
@@ -441,8 +504,16 @@
               "description": "",
               "schema": "input RemoveCircuitInput { id: OID! }",
               "template": "",
-              "reducer": "state.circuits = state.circuits.filter((c) => c.id !== action.input.id);\nstate.cabinetDevices = state.cabinetDevices.filter(\n  (d) => d.circuitId !== action.input.id,\n);\nstate.reports = state.reports.filter(\n  (r) => r.circuitId !== action.input.id,\n);\nfor (const u of state.units)\n  for (const s of u.symbols)\n    if (s.circuitId === action.input.id) s.circuitId = null;",
-              "errors": [],
+              "reducer": "if (!state.circuits.some((c) => c.id === action.input.id))\n  throw new UnknownCircuitError(\"Unknown circuit\");\nstate.circuits = state.circuits.filter((c) => c.id !== action.input.id);\nstate.routes = (state.routes ?? []).filter(\n  (r) => r.circuitId !== action.input.id,\n);\nstate.cabinetDevices = state.cabinetDevices.filter(\n  (d) => d.circuitId !== action.input.id,\n);\nstate.reports = state.reports.filter(\n  (r) => r.circuitId !== action.input.id,\n);\nfor (const u of state.units)\n  for (const s of u.symbols)\n    if (s.circuitId === action.input.id) s.circuitId = null;",
+              "errors": [
+                {
+                  "id": "5ebe4c6d-c43e-4430-b719-3803203509d9",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
+                  "template": ""
+                }
+              ],
               "examples": [],
               "scope": "global"
             },
@@ -484,8 +555,37 @@
               "description": "Add a cable route polyline for a circuit",
               "schema": "input AddRouteInput { route: CableRouteInput! }",
               "template": "",
-              "reducer": "const r = action.input.route;\nif (!state.circuits.some((c) => c.id === r.circuitId))\n  throw new UnknownCircuitError(\"Unknown circuit\");\nif (!state.units.some((u) => u.id === r.unitId))\n  throw new UnknownUnitError(\"Unknown unit\");\nif (!r.points || r.points.length < 2) return;\nstate.routes = state.routes ?? [];\nif (state.routes.some((x) => x.id === r.id))\n  throw new DuplicateIdError(\"Route id already exists\");\nstate.routes.push({\n  id: r.id,\n  circuitId: r.circuitId,\n  unitId: r.unitId,\n  points: r.points.map((point) => ({ x: point.x, y: point.y })),\n  reservePercent: r.reservePercent ?? 10,\n});",
-              "errors": [],
+              "reducer": "const r = action.input.route;\nif (!state.circuits.some((c) => c.id === r.circuitId))\n  throw new UnknownCircuitError(\"Unknown circuit\");\nif (!state.units.some((u) => u.id === r.unitId))\n  throw new UnknownUnitError(\"Unknown unit\");\nif (!r.points || r.points.length < 2)\n  throw new InvalidRouteError(\"A route needs at least two points\");\nif (!r.points.every((point) => Number.isFinite(point.x) && Number.isFinite(point.y)))\n  throw new InvalidRouteError(\"Route points must be finite\");\nif (r.reservePercent != null && (!Number.isFinite(r.reservePercent) || r.reservePercent < 0))\n  throw new InvalidRouteError(\"Route reserve must be non-negative\");\nstate.routes = state.routes ?? [];\nif (state.routes.some((x) => x.id === r.id))\n  throw new DuplicateIdError(\"Route id already exists\");\nstate.routes.push({\n  id: r.id,\n  circuitId: r.circuitId,\n  unitId: r.unitId,\n  points: r.points.map((point) => ({ x: point.x, y: point.y })),\n  reservePercent: r.reservePercent ?? 10,\n});",
+              "errors": [
+                {
+                  "id": "5732e44d-1fd6-4156-be3d-2dd54ef99ad0",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "46c439b8-77f0-4f2f-8346-96eb6b006d38",
+                  "code": "UNKNOWN_UNIT",
+                  "name": "UnknownUnitError",
+                  "description": "The unit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "1b9af54b-f926-4c66-bf49-bddbde55f758",
+                  "code": "DUPLICATE_ID",
+                  "name": "DuplicateIdError",
+                  "description": "The route id is already in use",
+                  "template": ""
+                },
+                {
+                  "id": "e7ef3418-beba-4aa0-84be-da0dc5577625",
+                  "code": "INVALID_ROUTE",
+                  "name": "InvalidRouteError",
+                  "description": "Route points or reserve are invalid",
+                  "template": ""
+                }
+              ],
               "id": "a1408281-1031-4758-92df-9032a1a5fb9e",
               "scope": "global",
               "examples": []
@@ -495,8 +595,37 @@
               "description": "Update a cable route polyline",
               "schema": "input UpdateRouteInput { id: OID! circuitId: OID unitId: OID points: [PositionInput!] reservePercent: Float }",
               "template": "",
-              "reducer": "const r = (state.routes ?? []).find((x) => x.id === action.input.id);\nif (!r) return;\nconst i = action.input;\nif (i.circuitId != null) {\n  if (!state.circuits.some((c) => c.id === i.circuitId))\n    throw new UnknownCircuitError(\"Unknown circuit\");\n  r.circuitId = i.circuitId;\n}\nif (i.unitId != null) {\n  if (!state.units.some((u) => u.id === i.unitId))\n    throw new UnknownUnitError(\"Unknown unit\");\n  r.unitId = i.unitId;\n}\nif (i.points != null && i.points.length >= 2)\n  r.points = i.points.map((point) => ({ x: point.x, y: point.y }));\nif (i.reservePercent !== undefined) r.reservePercent = i.reservePercent;",
-              "errors": [],
+              "reducer": "const r = (state.routes ?? []).find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRouteError(\"Unknown route\");\nconst i = action.input;\nif (i.circuitId != null) {\n  if (!state.circuits.some((c) => c.id === i.circuitId))\n    throw new UnknownCircuitError(\"Unknown circuit\");\n  r.circuitId = i.circuitId;\n}\nif (i.unitId != null) {\n  if (!state.units.some((u) => u.id === i.unitId))\n    throw new UnknownUnitError(\"Unknown unit\");\n  r.unitId = i.unitId;\n}\nif (i.points != null) {\n  if (i.points.length < 2)\n    throw new InvalidRouteError(\"A route needs at least two points\");\n  if (!i.points.every((point) => Number.isFinite(point.x) && Number.isFinite(point.y)))\n    throw new InvalidRouteError(\"Route points must be finite\");\n  r.points = i.points.map((point) => ({ x: point.x, y: point.y }));\n}\nif (i.reservePercent !== undefined) {\n  if (i.reservePercent != null && (!Number.isFinite(i.reservePercent) || i.reservePercent < 0))\n    throw new InvalidRouteError(\"Route reserve must be non-negative\");\n  r.reservePercent = i.reservePercent;\n}",
+              "errors": [
+                {
+                  "id": "6546eb4b-2e81-4a8c-aa59-831b2d9fe30d",
+                  "code": "UNKNOWN_ROUTE",
+                  "name": "UnknownRouteError",
+                  "description": "The route does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "faef4f0d-69f6-4933-b4a7-138fbbb8204f",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "0ac3e20a-88d3-496d-9ca5-bda1f0605dbb",
+                  "code": "UNKNOWN_UNIT",
+                  "name": "UnknownUnitError",
+                  "description": "The unit does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "3f85d92c-9d22-4b1c-ad23-6ceb5f045d66",
+                  "code": "INVALID_ROUTE",
+                  "name": "InvalidRouteError",
+                  "description": "Route points or reserve are invalid",
+                  "template": ""
+                }
+              ],
               "id": "dd56af40-4f72-4278-ade4-03f4e33c4062",
               "scope": "global",
               "examples": []
@@ -506,8 +635,16 @@
               "description": "Remove a cable route polyline",
               "schema": "input RemoveRouteInput { id: OID! }",
               "template": "",
-              "reducer": "state.routes = (state.routes ?? []).filter((x) => x.id !== action.input.id);",
-              "errors": [],
+              "reducer": "if (!(state.routes ?? []).some((x) => x.id === action.input.id))\n  throw new UnknownRouteError(\"Unknown route\");\nstate.routes = (state.routes ?? []).filter(\n  (x) => x.id !== action.input.id,\n);",
+              "errors": [
+                {
+                  "id": "57228705-6a10-4ac4-aa61-933d01f053e3",
+                  "code": "UNKNOWN_ROUTE",
+                  "name": "UnknownRouteError",
+                  "description": "The route does not exist",
+                  "template": ""
+                }
+              ],
               "id": "b32227cc-4ac2-4d0c-8832-a67b06ff17fd",
               "scope": "global",
               "examples": []
@@ -525,13 +662,20 @@
               "description": "Add a distribution board",
               "schema": "input AddDistributorInput { distributor: DistributorInput! }",
               "template": "",
-              "reducer": "if (state.distributors.some((d) => d.id === action.input.distributor.id))\n  throw new DuplicateIdError(\"Distribution board id already exists\");\nconst d = action.input.distributor;\nstate.distributors.push({\n  ...d,\n  location: d.location ?? null,\n});",
+              "reducer": "if (state.distributors.some((d) => d.id === action.input.distributor.id))\n  throw new DuplicateIdError(\"Distribution board id already exists\");\nconst d = action.input.distributor;\nif (!d.name.trim()) throw new InvalidDistributorError(\"A distribution board needs a name\");\nif (!Number.isInteger(d.rows) || d.rows < 1)\n  throw new InvalidDistributorError(\"Rows must be a positive integer\");\nif (!Number.isInteger(d.tePerRow) || d.tePerRow < 1)\n  throw new InvalidDistributorError(\"TE per row must be a positive integer\");\nif (\n  __omp_shell(\"Number.isFinite(d.reservePercent) ||\")\n  d.reservePercent < 0 ||\n  d.reservePercent > 100\n)\n  throw new InvalidDistributorError(\"Reserve must be between 0 and 100 percent\");\nstate.distributors.push({\n  ...d,\n  location: d.location ?? null,\n});",
               "errors": [
                 {
-                  "id": "519a6799-47ce-4901-bbb7-d7a6ae7e7497",
+                  "id": "adb0de5b-01a1-4abc-8394-c2d194eb0486",
                   "code": "DUPLICATE_ID",
                   "name": "DuplicateIdError",
-                  "description": "The id is already in use",
+                  "description": "The distribution board id is already in use",
+                  "template": ""
+                },
+                {
+                  "id": "1d6c2fbb-e208-44fa-910e-eddc3a87ceb4",
+                  "code": "INVALID_DISTRIBUTOR",
+                  "name": "InvalidDistributorError",
+                  "description": "Distribution board fields are invalid",
                   "template": ""
                 }
               ],
@@ -544,13 +688,20 @@
               "description": "Edit a distribution board",
               "schema": "input UpdateDistributorInput { id: OID! name: String rows: Int tePerRow: Int reservePercent: Float location: String }",
               "template": "",
-              "reducer": "const d = state.distributors.find((x) => x.id === action.input.id);\nif (!d) throw new UnknownDistributorError(\"Unknown distribution board\");\nconst i = action.input;\nif (i.name != null) d.name = i.name;\nif (i.rows !== undefined && i.rows !== null) d.rows = i.rows;\nif (i.tePerRow !== undefined && i.tePerRow !== null)\n  d.tePerRow = i.tePerRow;\nif (i.reservePercent !== undefined && i.reservePercent !== null)\n  d.reservePercent = i.reservePercent;\nif (i.location !== undefined) d.location = i.location;",
+              "reducer": "const d = state.distributors.find((x) => x.id === action.input.id);\nif (!d) throw new UnknownDistributorError(\"Unknown distribution board\");\nconst i = action.input;\nif (i.name != null) {\n  if (!i.name.trim()) throw new InvalidDistributorError(\"A distribution board needs a name\");\n  d.name = i.name;\n}\nif (i.rows !== undefined && i.rows !== null) {\n  if (!Number.isInteger(i.rows) || i.rows < 1)\n    throw new InvalidDistributorError(\"Rows must be a positive integer\");\n  d.rows = i.rows;\n}\nif (i.tePerRow !== undefined && i.tePerRow !== null) {\n  if (!Number.isInteger(i.tePerRow) || i.tePerRow < 1)\n    throw new InvalidDistributorError(\"TE per row must be a positive integer\");\n  d.tePerRow = i.tePerRow;\n}\nif (i.reservePercent !== undefined && i.reservePercent !== null) {\n  if (!Number.isFinite(i.reservePercent) || i.reservePercent < 0 || i.reservePercent > 100)\n    throw new InvalidDistributorError(\"Reserve must be between 0 and 100 percent\");\n  d.reservePercent = i.reservePercent;\n}\nif (i.location !== undefined) d.location = i.location;",
               "errors": [
                 {
-                  "id": "540fb73e-7e64-47cb-b46d-3c56a4b7d537",
+                  "id": "bf3fd299-8096-49b0-ada9-114083332103",
                   "code": "UNKNOWN_DISTRIBUTOR",
                   "name": "UnknownDistributorError",
                   "description": "The board does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "9564d23f-78a3-41aa-a625-a6003acdb441",
+                  "code": "INVALID_DISTRIBUTOR",
+                  "name": "InvalidDistributorError",
+                  "description": "Distribution board fields are invalid",
                   "template": ""
                 }
               ],
@@ -563,13 +714,27 @@
               "description": "Replace the cabinet proposal for a board",
               "schema": "input PlanCabinetInput { distributorId: OID! devices: [CabinetDeviceInput!]! }",
               "template": "",
-              "reducer": "const d = state.distributors.find(\n  (x) => x.id === action.input.distributorId,\n);\nif (!d) throw new UnknownDistributorError(\"Unknown distribution board\");\nstate.cabinetDevices = [\n  ...state.cabinetDevices.filter((x) => x.distributorId !== d.id),\n  ...action.input.devices.map((x) => ({\n    ...x,\n    distributorId: d.id,\n    article: x.article ?? null,\n    circuitId: x.circuitId ?? null,\n    phases: x.phases ?? null,\n    price: x.price ?? null,\n    row: x.row ?? null,\n    startTe: x.startTe ?? null,\n  })),\n];",
+              "reducer": "const d = state.distributors.find(\n  (x) => x.id === action.input.distributorId,\n);\nif (!d) throw new UnknownDistributorError(\"Unknown distribution board\");\nfor (const x of action.input.devices) {\n  if (!Number.isInteger(x.teWidth) || x.teWidth < 1)\n    throw new InvalidDistributorError(\"Device width must be a positive integer\");\n  if (x.row != null && (!Number.isInteger(x.row) || x.row < 0))\n    throw new InvalidDistributorError(\"Device row must be a non-negative integer\");\n  if (x.startTe != null && (!Number.isInteger(x.startTe) || x.startTe < 1))\n    throw new InvalidDistributorError(\"Device start TE must be a positive integer\");\n  if (\n    x.circuitId != null &&\n    __omp_shell(\"state.circuits.some((c) => c.id === x.circuitId)\")\n  )\n    throw new UnknownCircuitError(\"Unknown circuit\");\n}\nstate.cabinetDevices = [\n  ...state.cabinetDevices.filter((x) => x.distributorId !== d.id),\n  ...action.input.devices.map((x) => ({\n    ...x,\n    distributorId: d.id,\n    article: x.article ?? null,\n    circuitId: x.circuitId ?? null,\n    phases: x.phases ?? null,\n    price: x.price ?? null,\n    row: x.row ?? null,\n    startTe: x.startTe ?? null,\n  })),\n];",
               "errors": [
                 {
-                  "id": "f3fed620-ed6f-4f90-aec8-5e6b4c7440dc",
+                  "id": "9fb70bb4-6d1d-4366-affe-79d22afe7e1a",
                   "code": "UNKNOWN_DISTRIBUTOR",
                   "name": "UnknownDistributorError",
                   "description": "The board does not exist",
+                  "template": ""
+                },
+                {
+                  "id": "e51cd5e4-17b0-4969-a3fe-2407c37e1392",
+                  "code": "INVALID_DISTRIBUTOR",
+                  "name": "InvalidDistributorError",
+                  "description": "Cabinet device fields are invalid",
+                  "template": ""
+                },
+                {
+                  "id": "946cdfc3-0a58-4831-b08b-db63b400bcdd",
+                  "code": "UNKNOWN_CIRCUIT",
+                  "name": "UnknownCircuitError",
+                  "description": "The circuit does not exist",
                   "template": ""
                 }
               ],
@@ -582,13 +747,20 @@
               "description": "Replace the KNX group-address plan",
               "schema": "input SetGroupAddressesInput { addresses: [GroupAddressInput!]! }",
               "template": "",
-              "reducer": "const seen = new Set();\nfor (const ga of action.input.addresses) {\n  const key = `${ga.main}/${ga.middle}/${ga.sub}`;\n  if (seen.has(key))\n    throw new DuplicateGroupAddressError(\"Duplicate group address\");\n  seen.add(key);\n}\nstate.groupAddresses = action.input.addresses.map((ga) => ({\n  ...ga,\n  description: ga.description ?? null,\n  fixtureId: ga.fixtureId ?? null,\n  functionKey: ga.functionKey ?? null,\n}));",
+              "reducer": "const seen = new Set();\nfor (const ga of action.input.addresses) {\n  if (!Number.isInteger(ga.main) || ga.main < 0 || ga.main > 31)\n    throw new InvalidGroupAddressError(\"Main group must be 0..31\");\n  if (!Number.isInteger(ga.middle) || ga.middle < 0 || ga.middle > 7)\n    throw new InvalidGroupAddressError(\"Middle group must be 0..7\");\n  if (!Number.isInteger(ga.sub) || ga.sub < 0 || ga.sub > 255)\n    throw new InvalidGroupAddressError(\"Sub group must be 0..255\");\n  const key = `${ga.main}/${ga.middle}/${ga.sub}`;\n  if (seen.has(key))\n    throw new DuplicateGroupAddressError(\"Duplicate group address\");\n  seen.add(key);\n}\nstate.groupAddresses = action.input.addresses.map((ga) => ({\n  ...ga,\n  description: ga.description ?? null,\n  fixtureId: ga.fixtureId ?? null,\n  functionKey: ga.functionKey ?? null,\n}));",
               "errors": [
                 {
-                  "id": "8188b055-598d-484c-ab9f-490ca0a3862f",
-                  "code": "DUPLICATE_GA",
+                  "id": "7952b23c-2d26-4dc5-9a69-13031d048ed9",
+                  "code": "DUPLICATE_GROUP_ADDRESS",
                   "name": "DuplicateGroupAddressError",
                   "description": "The group address is already in use",
+                  "template": ""
+                },
+                {
+                  "id": "437d26c0-671f-4fee-bc22-ff00b81c49f8",
+                  "code": "INVALID_GROUP_ADDRESS",
+                  "name": "InvalidGroupAddressError",
+                  "description": "The group address range is invalid",
                   "template": ""
                 }
               ],

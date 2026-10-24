@@ -1,9 +1,13 @@
 export type ErrorCode =
   | "DuplicateIdError"
   | "DuplicateCircuitNumberError"
+  | "InvalidCircuitError"
+  | "UnknownDistributorError"
   | "UnknownCircuitError"
   | "UnknownUnitError"
-  | "UnknownSymbolError";
+  | "UnknownSymbolError"
+  | "InvalidRouteError"
+  | "UnknownRouteError";
 
 export interface ReducerError {
   errorCode: ErrorCode;
@@ -19,6 +23,20 @@ export class DuplicateIdError extends Error implements ReducerError {
 export class DuplicateCircuitNumberError extends Error implements ReducerError {
   errorCode = "DuplicateCircuitNumberError" as ErrorCode;
   constructor(message = "DuplicateCircuitNumberError") {
+    super(message);
+  }
+}
+
+export class InvalidCircuitError extends Error implements ReducerError {
+  errorCode = "InvalidCircuitError" as ErrorCode;
+  constructor(message = "InvalidCircuitError") {
+    super(message);
+  }
+}
+
+export class UnknownDistributorError extends Error implements ReducerError {
+  errorCode = "UnknownDistributorError" as ErrorCode;
+  constructor(message = "UnknownDistributorError") {
     super(message);
   }
 }
@@ -44,14 +62,55 @@ export class UnknownSymbolError extends Error implements ReducerError {
   }
 }
 
-export const errors = {
-  AddCircuit: { DuplicateIdError, DuplicateCircuitNumberError },
+export class InvalidRouteError extends Error implements ReducerError {
+  errorCode = "InvalidRouteError" as ErrorCode;
+  constructor(message = "InvalidRouteError") {
+    super(message);
+  }
+}
 
-  UpdateCircuit: { UnknownCircuitError },
+export class UnknownRouteError extends Error implements ReducerError {
+  errorCode = "UnknownRouteError" as ErrorCode;
+  constructor(message = "UnknownRouteError") {
+    super(message);
+  }
+}
+
+export const errors = {
+  AddCircuit: {
+    DuplicateIdError,
+    DuplicateCircuitNumberError,
+    InvalidCircuitError,
+    UnknownDistributorError,
+  },
+
+  UpdateCircuit: {
+    UnknownCircuitError,
+    InvalidCircuitError,
+    UnknownDistributorError,
+  },
+
+  RemoveCircuit: { UnknownCircuitError },
 
   AssignSymbolCircuit: {
     UnknownCircuitError,
     UnknownUnitError,
     UnknownSymbolError,
   },
+
+  AddRoute: {
+    UnknownCircuitError,
+    UnknownUnitError,
+    DuplicateIdError,
+    InvalidRouteError,
+  },
+
+  UpdateRoute: {
+    UnknownRouteError,
+    UnknownCircuitError,
+    UnknownUnitError,
+    InvalidRouteError,
+  },
+
+  RemoveRoute: { UnknownRouteError },
 };

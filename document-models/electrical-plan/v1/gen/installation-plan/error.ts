@@ -4,6 +4,7 @@ export type ErrorCode =
   | "UnknownUnitError"
   | "InvalidRoomError"
   | "UnknownRoomError"
+  | "UnknownCircuitError"
   | "UnknownSymbolError";
 
 export interface ReducerError {
@@ -45,6 +46,13 @@ export class UnknownRoomError extends Error implements ReducerError {
   }
 }
 
+export class UnknownCircuitError extends Error implements ReducerError {
+  errorCode = "UnknownCircuitError" as ErrorCode;
+  constructor(message = "UnknownCircuitError") {
+    super(message);
+  }
+}
+
 export class UnknownSymbolError extends Error implements ReducerError {
   errorCode = "UnknownSymbolError" as ErrorCode;
   constructor(message = "UnknownSymbolError") {
@@ -63,15 +71,25 @@ export const errors = {
 
   RemoveRoom: { UnknownUnitError, UnknownRoomError },
 
-  AddSymbol: { UnknownUnitError, DuplicateIdError },
+  AddSymbol: {
+    UnknownUnitError,
+    DuplicateIdError,
+    UnknownCircuitError,
+    UnknownRoomError,
+  },
 
-  UpdateSymbol: { UnknownUnitError, UnknownSymbolError },
+  UpdateSymbol: {
+    UnknownUnitError,
+    UnknownSymbolError,
+    UnknownCircuitError,
+    UnknownRoomError,
+  },
 
   UpdateSymbolDetails: { UnknownUnitError, UnknownSymbolError },
 
   MoveSymbol: { UnknownUnitError, UnknownSymbolError },
 
-  RemoveSymbol: { UnknownUnitError },
+  RemoveSymbol: { UnknownUnitError, UnknownSymbolError },
 
   SetProjectName: { InvalidUnitError },
 

@@ -1,6 +1,6 @@
 {
   "name": "planvolt",
-  "description": "Electrical planning package: installation plan, circuits, BOM, cabinet, KNX and inspection protocol.",
+  "description": "Electrical and HLSK planning for Powerhouse: installation plans, circuits, BOM, cabinet, KNX, inspection protocol, sanitary/heating/ventilation/climate fixtures, pipe and duct routes, risers, checks and trade-specific drive apps.",
   "category": "Engineering",
   "publisher": {
     "name": "Planvolt",
@@ -10,16 +10,34 @@
     {
       "id": "planvolt/electrical-plan",
       "name": "Electrical Plan"
+    },
+    {
+      "id": "planvolt/hlsk-plan",
+      "name": "HLSK Plan"
     }
   ],
-  "apps": [],
+  "apps": [
+    {
+      "id": "electrician-drive-app",
+      "name": "Electrician Drive",
+      "documentTypes": ["powerhouse/document-drive"]
+    },
+    {
+      "name": "HLSK Drive",
+      "id": "hlsk-drive-app",
+      "documentTypes": ["powerhouse/document-drive"]
+    }
+  ],
   "editors": [
     {
       "id": "electrical-plan-editor",
       "name": "Electrical Plan Editor",
-      "documentTypes": [
-        "planvolt/electrical-plan"
-      ]
+      "documentTypes": ["planvolt/electrical-plan"]
+    },
+    {
+      "id": "hlsk-plan-editor",
+      "name": "HLSK Plan Editor",
+      "documentTypes": ["planvolt/hlsk-plan"]
     }
   ],
   "processors": [],

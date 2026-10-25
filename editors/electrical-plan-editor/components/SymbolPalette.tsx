@@ -17,7 +17,13 @@ const CATEGORY_LABELS: { id: ElectricalCategoryId | "all"; label: string }[] = [
   { id: "other", label: "Other" },
 ];
 
-export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: string | null; onSelect: (id: string | null) => void }) {
+export function SymbolPalette({
+  selectedDefId,
+  onSelect,
+}: {
+  selectedDefId: string | null;
+  onSelect: (id: string | null) => void;
+}) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<ElectricalCategoryId | "all">("all");
   const filtered = useMemo(() => {
@@ -25,7 +31,9 @@ export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: stri
     return electricalCatalog.filter((def) => {
       if (category !== "all" && def.category !== category) return false;
       if (!query) return true;
-      return `${def.name} ${def.de} ${def.id} ${def.article ?? ""} ${def.tags?.join(" ") ?? ""}`.toLowerCase().includes(query);
+      return `${def.name} ${def.de} ${def.id} ${def.article ?? ""} ${def.tags?.join(" ") ?? ""}`
+        .toLowerCase()
+        .includes(query);
     });
   }, [category, search]);
 
@@ -33,8 +41,12 @@ export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: stri
     <aside className="flex h-full min-h-0 w-[292px] shrink-0 flex-col border-r border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-3">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Symbol library</h2>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500">{electricalCatalog.length} DIN</span>
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Symbol library
+          </h2>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500">
+            {electricalCatalog.length} DIN
+          </span>
         </div>
         <input
           value={search}
@@ -56,7 +68,11 @@ export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: stri
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-2">
-        {filtered.length === 0 ? <p className="p-4 text-center text-xs text-slate-400">No symbol matches.</p> : null}
+        {filtered.length === 0 ? (
+          <p className="p-4 text-center text-xs text-slate-400">
+            No symbol matches.
+          </p>
+        ) : null}
         <div className="grid grid-cols-3 gap-1.5">
           {filtered.map((def) => {
             const active = selectedDefId === def.id;
@@ -69,10 +85,17 @@ export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: stri
                 onClick={() => onSelect(active ? null : def.id)}
                 className={`group flex min-h-[82px] flex-col items-center justify-between gap-1 rounded-lg border p-1.5 text-center transition ${active ? "border-blue-500 bg-blue-50 shadow-sm" : "border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50"}`}
               >
-                <svg viewBox="-11 -11 22 22" className="h-10 w-10 shrink-0 text-slate-700" style={{ color }} aria-hidden="true">
+                <svg
+                  viewBox="-11 -11 22 22"
+                  className="h-10 w-10 shrink-0 text-slate-700"
+                  style={{ color }}
+                  aria-hidden="true"
+                >
                   <SymbolGlyph def={def} color={color} />
                 </svg>
-                <span className="line-clamp-2 text-[9px] font-medium leading-tight text-slate-600 group-hover:text-slate-900">{def.name}</span>
+                <span className="line-clamp-2 text-[9px] font-medium leading-tight text-slate-600 group-hover:text-slate-900">
+                  {def.name}
+                </span>
               </button>
             );
           })}
@@ -80,7 +103,11 @@ export function SymbolPalette({ selectedDefId, onSelect }: { selectedDefId: stri
       </div>
       {selectedDefId ? (
         <div className="border-t border-slate-200 p-2">
-          <button type="button" className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50" onClick={() => onSelect(null)}>
+          <button
+            type="button"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50"
+            onClick={() => onSelect(null)}
+          >
             Stop placing (Esc)
           </button>
         </div>

@@ -52,6 +52,7 @@ jobs:
       project_name: ${{ steps.params.outputs.project_name }}
       dry_run: ${{ steps.params.outputs.dry_run }}
       skip_docker: ${{ steps.params.outputs.skip_docker }}
+      docker_enabled: ${{ steps.params.outputs.docker_enabled }}
     steps:
       - name: Determine parameters
         id: params
@@ -93,6 +94,11 @@ jobs:
           echo "project_name=$PROJECT_NAME" >> $GITHUB_OUTPUT
           echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
           echo "skip_docker=$SKIP_DOCKER" >> $GITHUB_OUTPUT
+          if [ -n "${{ secrets.DOCKER_USERNAME }}" ] && [ -n "${{ secrets.DOCKER_PASSWORD }}" ]; then
+            echo "docker_enabled=true" >> $GITHUB_OUTPUT
+          else
+            echo "docker_enabled=false" >> $GITHUB_OUTPUT
+          fi
 
           echo "Channel: $CHANNEL"
           echo "Version: $VERSION"
@@ -156,8 +162,7 @@ jobs:
         run: pnpm build
 
       - name: Run tests
-        run: pnpm test || true
-        continue-on-error: true
+        run: pnpm test
 
       - name: Bump version
         id: version
@@ -225,8 +230,7 @@ jobs:
     if: |
       needs.prepare.outputs.skip_docker != 'true' &&
       needs.prepare.outputs.dry_run != 'true' &&
-      secrets.DOCKER_USERNAME != '' &&
-      secrets.DOCKER_PASSWORD != ''
+      needs.prepare.outputs.docker_enabled == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read

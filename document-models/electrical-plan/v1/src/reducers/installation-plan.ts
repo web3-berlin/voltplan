@@ -3,6 +3,7 @@ import {
   DuplicateIdError,
   InvalidRoomError,
   InvalidUnitError,
+  UnknownCircuitError,
   UnknownRoomError,
   UnknownSymbolError,
   UnknownUnitError,
@@ -41,13 +42,26 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
       )
         throw new DuplicateIdError("Symbol id already exists");
       const symbol = action.input.symbol;
+      if (
+        symbol.circuitId != null &&
+        !state.circuits.some((c) => c.id === symbol.circuitId)
+      )
+        throw new UnknownCircuitError("Unknown circuit");
+      if (
+        symbol.roomId != null &&
+        !(u.rooms ?? []).some((r) => r.id === symbol.roomId)
+      )
+        throw new UnknownRoomError("Unknown room");
       u.symbols.push({
-        ...symbol,
-        circuitId: symbol.circuitId ?? null,
-        color: symbol.color ?? null,
-        label: symbol.label ?? null,
-        locked: symbol.locked ?? null,
+        id: symbol.id,
+        defId: symbol.defId,
+        position: { x: symbol.position.x, y: symbol.position.y },
+        rotation: symbol.rotation,
         mountHeightCm: symbol.mountHeightCm ?? null,
+        label: symbol.label ?? null,
+        color: symbol.color ?? null,
+        locked: symbol.locked ?? null,
+        circuitId: symbol.circuitId ?? null,
         roomId: symbol.roomId ?? null,
         details: null,
         knx: symbol.knxEnabled
@@ -62,8 +76,19 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
       if (!s) throw new UnknownSymbolError("Unknown symbol");
       const i = action.input;
       if (i.defId !== undefined && i.defId !== null) s.defId = i.defId;
-      if (i.circuitId !== undefined) s.circuitId = i.circuitId;
-      if (i.roomId !== undefined) s.roomId = i.roomId;
+      if (i.circuitId !== undefined) {
+        if (
+          i.circuitId != null &&
+          !state.circuits.some((c) => c.id === i.circuitId)
+        )
+          throw new UnknownCircuitError("Unknown circuit");
+        s.circuitId = i.circuitId;
+      }
+      if (i.roomId !== undefined) {
+        if (i.roomId != null && !(u.rooms ?? []).some((r) => r.id === i.roomId))
+          throw new UnknownRoomError("Unknown room");
+        s.roomId = i.roomId;
+      }
       if (i.label !== undefined) s.label = i.label;
       if (i.color !== undefined) s.color = i.color;
       if (i.rotation !== undefined && i.rotation !== null)
@@ -92,6 +117,8 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
     removeSymbolOperation(state, action) {
       const u = state.units.find((x) => x.id === action.input.unitId);
       if (!u) throw new UnknownUnitError("Unknown unit");
+      if (!u.symbols.some((s) => s.id === action.input.id))
+        throw new UnknownSymbolError("Unknown symbol");
       u.symbols = u.symbols.filter((s) => s.id !== action.input.id);
       state.groupAddresses = state.groupAddresses.filter(
         (ga) => ga.fixtureId !== action.input.id,
@@ -154,6 +181,12 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
       if (!r.name.trim()) throw new InvalidRoomError("A room needs a name");
       if (r.points.length < 3)
         throw new InvalidRoomError("A room needs at least three points");
+      if (
+        !r.points.every(
+          (point) => Number.isFinite(point.x) && Number.isFinite(point.y),
+        )
+      )
+        throw new InvalidRoomError("Room points must be finite");
       u.rooms = u.rooms ?? [];
       if (u.rooms.some((x) => x.id === r.id))
         throw new DuplicateIdError("Room id already exists");
@@ -178,8 +211,17 @@ export const electricalPlanInstallationPlanOperations: ElectricalPlanInstallatio
         r.name = i.name.trim();
       }
       if (i.fillColor !== undefined) r.fillColor = i.fillColor;
-      if (i.points != null)
+      if (i.points != null) {
+        if (i.points.length < 3)
+          throw new InvalidRoomError("A room needs at least three points");
+        if (
+          !i.points.every(
+            (point) => Number.isFinite(point.x) && Number.isFinite(point.y),
+          )
+        )
+          throw new InvalidRoomError("Room points must be finite");
         r.points = i.points.map((point) => ({ x: point.x, y: point.y }));
+      }
       if (i.labelX !== undefined && i.labelX !== null) r.labelX = i.labelX;
       if (i.labelY !== undefined && i.labelY !== null) r.labelY = i.labelY;
       if (i.locked !== undefined) r.locked = i.locked;

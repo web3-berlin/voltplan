@@ -97,9 +97,7 @@ describe("CircuitsOperations", () => {
 
     expect(isElectricalPlanDocument(updatedDocument)).toBe(true);
     expect(updatedDocument.operations.global).toHaveLength(1);
-    expect(updatedDocument.operations.global[0].action.type).toBe(
-      "ADD_ROUTE",
-    );
+    expect(updatedDocument.operations.global[0].action.type).toBe("ADD_ROUTE");
     expect(updatedDocument.operations.global[0].action.input).toStrictEqual(
       input,
     );

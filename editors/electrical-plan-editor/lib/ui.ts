@@ -1,4 +1,8 @@
-export function downloadText(filename: string, content: string, mime = "text/plain"): void {
+export function downloadText(
+  filename: string,
+  content: string,
+  mime = "text/plain",
+): void {
   const blob = new Blob([content], { type: `${mime};charset=utf-8` });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -18,17 +22,27 @@ export function downloadBlob(filename: string, blob: Blob): void {
 }
 
 export function safeFilename(value: string, fallback = "plan"): string {
-  return value.trim().replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "") || fallback;
+  return (
+    value
+      .trim()
+      .replace(/[^\w.-]+/g, "-")
+      .replace(/^-+|-+$/g, "") || fallback
+  );
 }
 
 function escapeHtml(value: string): string {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 export function printHtml(title: string, body: string): void {
   const popup = window.open("", "_blank", "width=1100,height=800");
   if (!popup) return;
-  popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>
+  popup.document
+    .write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>
     @page { margin: 12mm; }
     body { font-family: ui-sans-serif, system-ui, sans-serif; color: #0f172a; margin: 0; }
     h1 { font-size: 18px; margin: 0 0 4px; } .meta { color: #64748b; font-size: 11px; margin-bottom: 16px; }
@@ -40,7 +54,10 @@ export function printHtml(title: string, body: string): void {
 }
 
 export function formatEuro(value: number): string {
-  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(value);
+  return new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR",
+  }).format(value);
 }
 
 export function round1(value: number): string {

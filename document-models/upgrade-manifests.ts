@@ -4,7 +4,9 @@
  */
 import type { UpgradeManifest } from "document-model";
 import { electricalPlanUpgradeManifest } from "document-models/electrical-plan/upgrades";
+import { hlskPlanUpgradeManifest } from "document-models/hlsk-plan/upgrades";
 
 export const upgradeManifests: UpgradeManifest<readonly number[]>[] = [
   electricalPlanUpgradeManifest,
+  hlskPlanUpgradeManifest,
 ];

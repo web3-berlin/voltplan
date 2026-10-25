@@ -21,9 +21,12 @@
     {
       "id": "electrical-plan-editor",
       "name": "Electrical Plan Editor",
-      "documentTypes": [
-        "planvolt/electrical-plan"
-      ]
+      "documentTypes": ["planvolt/electrical-plan"]
+    },
+    {
+      "name": "hlsk-plan-editor",
+      "id": "hlsk-plan-editor",
+      "documentTypes": ["planvolt/hlsk-plan"]
     }
   ],
   "processors": [],

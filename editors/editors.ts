@@ -4,5 +4,6 @@
  */
 import type { EditorModule } from "document-model";
 import { ElectricalPlanEditor } from "./electrical-plan-editor/module.js";
+import { HlskPlanEditor } from "./hlsk-plan-editor/module.js";
 
-export const editors: EditorModule[] = [ElectricalPlanEditor];
+export const editors: EditorModule[] = [ElectricalPlanEditor, HlskPlanEditor];

@@ -1,0 +1,781 @@
+import type { DocumentModelGlobalState } from "document-model";
+
+export const documentModel: DocumentModelGlobalState = {
+  id: "planvolt/hlsk-plan",
+  name: "HLSK Plan",
+  author: {
+    name: "Planvolt",
+    website: "https://openplan3d.com",
+  },
+  extension: "hlsk",
+  description:
+    "Integrated sanitary, heating, ventilation and climate execution plan with pipe and duct routes, risers and simple site checks.",
+  specifications: [
+    {
+      version: 1,
+      changeLog: [],
+      state: {
+        global: {
+          schema:
+            "type HlskPlanState {\n  name: String!\n  activeUnitId: OID!\n  units: [HlskUnit!]!\n  settings: HlskSettings!\n  nextFixtureNumber: Int!\n}\n\ntype HlskUnit {\n  id: OID!\n  name: String!\n  level: Int!\n  background: PlanBackground\n  rooms: [HlskRoom!]\n  fixtures: [HlskFixture!]!\n  pipeRoutes: [PipeRoute!]!\n  ductRoutes: [DuctRoute!]!\n  risers: [Riser!]!\n}\n\ntype HlskRoom {\n  id: OID!\n  name: String!\n  points: [Position!]!\n  fillColor: String\n  labelX: Float!\n  labelY: Float!\n  locked: Boolean\n}\n\ntype PlanBackground {\n  dataUrl: String\n  widthCm: Float\n  heightCm: Float\n  x: Float!\n  y: Float!\n  scale: Float!\n  opacity: Float!\n  rotation: Float!\n  locked: Boolean!\n}\n\ntype Position {\n  x: Float!\n  y: Float!\n}\n\ntype HlskFixture {\n  id: OID!\n  kind: String!\n  discipline: String!\n  name: String!\n  position: Position!\n  rotation: Float!\n  roomId: String\n  mountHeightCm: Float\n  notes: String\n  locked: Boolean\n}\n\ntype PipeRoute {\n  id: OID!\n  kind: String!\n  points: [Position!]!\n  diameterMm: Float!\n  slopePercent: Float\n  insulation: Boolean\n  notes: String\n}\n\ntype DuctRoute {\n  id: OID!\n  kind: String!\n  points: [Position!]!\n  widthMm: Float!\n  heightMm: Float!\n  airflowM3h: Float\n  notes: String\n}\n\ntype Riser {\n  id: OID!\n  kind: String!\n  x: Float!\n  y: Float!\n  label: String\n  notes: String\n}\n\ntype HlskSettings {\n  showLabels: Boolean!\n  showMountHeights: Boolean!\n  pipeDiameterMm: Float!\n}\n\ninput PositionInput {\n  x: Float!\n  y: Float!\n}\n\ninput RoomInput {\n  id: OID!\n  name: String!\n  points: [PositionInput!]!\n  fillColor: String\n  labelX: Float!\n  labelY: Float!\n  locked: Boolean\n}\n\ninput BackgroundInput {\n  dataUrl: String\n  widthCm: Float\n  heightCm: Float\n  x: Float!\n  y: Float!\n  scale: Float!\n  opacity: Float!\n  rotation: Float!\n  locked: Boolean!\n}\n\ninput FixtureInput {\n  id: OID!\n  kind: String!\n  discipline: String!\n  name: String!\n  position: PositionInput!\n  rotation: Float!\n  roomId: String\n  mountHeightCm: Float\n  notes: String\n  locked: Boolean\n}\n\ninput PipeRouteInput {\n  id: OID!\n  kind: String!\n  points: [PositionInput!]!\n  diameterMm: Float!\n  slopePercent: Float\n  insulation: Boolean\n  notes: String\n}\n\ninput DuctRouteInput {\n  id: OID!\n  kind: String!\n  points: [PositionInput!]!\n  widthMm: Float!\n  heightMm: Float!\n  airflowM3h: Float\n  notes: String\n}\n\ninput RiserInput {\n  id: OID!\n  kind: String!\n  x: Float!\n  y: Float!\n  label: String\n  notes: String\n}\n\ninput AddUnitInput { id: OID! name: String! level: Int! }\ninput UpdateUnitInput { id: OID! name: String level: Int }\ninput RemoveUnitInput { id: OID! }\ninput AddRoomInput { unitId: OID! room: RoomInput! }\ninput UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }\ninput RemoveRoomInput { unitId: OID! id: OID! }\ninput AddFixtureInput { unitId: OID! fixture: FixtureInput! }\ninput UpdateFixtureInput { unitId: OID! id: OID! kind: String name: String discipline: String position: PositionInput rotation: Float roomId: String mountHeightCm: Float notes: String locked: Boolean }\ninput RemoveFixtureInput { unitId: OID! id: OID! }\ninput AddPipeRouteInput { unitId: OID! route: PipeRouteInput! }\ninput UpdatePipeRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] diameterMm: Float slopePercent: Float insulation: Boolean notes: String }\ninput RemovePipeRouteInput { unitId: OID! id: OID! }\ninput AddDuctRouteInput { unitId: OID! route: DuctRouteInput! }\ninput UpdateDuctRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] widthMm: Float heightMm: Float airflowM3h: Float notes: String }\ninput RemoveDuctRouteInput { unitId: OID! id: OID! }\ninput AddRiserInput { unitId: OID! riser: RiserInput! }\ninput UpdateRiserInput { unitId: OID! id: OID! kind: String x: Float y: Float label: String notes: String }\ninput RemoveRiserInput { unitId: OID! id: OID! }\ninput SetProjectNameInput { name: String! }\ninput SetActiveUnitInput { unitId: OID! }\ninput SetUnitBackgroundInput { unitId: OID! background: BackgroundInput! }\ninput UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }\ninput UpdateSettingsInput { showLabels: Boolean showMountHeights: Boolean pipeDiameterMm: Float }",
+          initialValue:
+            '{"name": "Untitled HLSK Project", "activeUnitId": "unit_1", "nextFixtureNumber": 1, "units": [{"id": "unit_1", "name": "Ground Floor", "level": 0, "background": null, "rooms": [], "fixtures": [], "pipeRoutes": [], "ductRoutes": [], "risers": []}], "settings": {"showLabels": true, "showMountHeights": false, "pipeDiameterMm": 15}}',
+          examples: [],
+        },
+        local: {
+          schema: "",
+          initialValue: "",
+          examples: [],
+        },
+      },
+      modules: [
+        {
+          id: "93b1649b-b764-476b-b280-129e9fd0a174",
+          name: "core",
+          description: "Project, floors, background and settings",
+          operations: [
+            {
+              id: "aaf8a6a2-4fa6-42f3-b059-2bb6689bdfdc",
+              name: "SET_PROJECT_NAME",
+              description: "Rename the plan",
+              schema: "input SetProjectNameInput { name: String! }",
+              reducer:
+                'if (!action.input.name.trim())\n  throw new InvalidNameError("A plan needs a name");\nstate.name = action.input.name;',
+              template: "",
+              errors: [
+                {
+                  id: "93b4c0c6-6d35-4747-a69b-271348d361d2",
+                  code: "INVALID_NAME",
+                  name: "InvalidNameError",
+                  description: "A plan needs a non-empty name",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "68f91a03-518a-4ece-9fc6-9540ff510a87",
+              name: "SET_ACTIVE_UNIT",
+              description: "Switch the active floor",
+              schema: "input SetActiveUnitInput { unitId: OID! }",
+              reducer:
+                'if (!state.units.some((u) => u.id === action.input.unitId))\n  throw new UnknownUnitError("Unknown unit");\nstate.activeUnitId = action.input.unitId;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "44cc495d-1baf-4de9-b911-62c50365978e",
+              name: "ADD_UNIT",
+              description: "Add a floor or apartment",
+              schema:
+                "input AddUnitInput { id: OID! name: String! level: Int! }",
+              reducer:
+                'if (!action.input.name.trim())\n  throw new InvalidUnitError("A unit needs a name");\nif (!Number.isInteger(action.input.level) || action.input.level < 0)\n  throw new InvalidUnitError("Level must be a non-negative integer");\nif (state.units.some((u) => u.id === action.input.id))\n  throw new DuplicateIdError("Unit id already exists");\nstate.units.push({\n  id: action.input.id,\n  name: action.input.name,\n  level: action.input.level,\n  background: null,\n  rooms: [],\n  fixtures: [],\n  pipeRoutes: [],\n  ductRoutes: [],\n  risers: [],\n});',
+              template: "",
+              errors: [
+                {
+                  id: "9a389e2f-3fa7-4ffe-9189-48b8fcacba69",
+                  code: "INVALID_UNIT",
+                  name: "InvalidUnitError",
+                  description: "The unit data is invalid",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "0d734639-ea4d-4df6-a3ce-753759b68979",
+              name: "UPDATE_UNIT",
+              description: "Change floor name or level",
+              schema:
+                "input UpdateUnitInput { id: OID! name: String level: Int }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.id);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (action.input.name !== undefined && action.input.name !== null) {\n  if (!action.input.name.trim()) throw new InvalidUnitError("A unit needs a name");\n  u.name = action.input.name;\n}\nif (action.input.level !== undefined && action.input.level !== null) {\n  if (!Number.isInteger(action.input.level) || action.input.level < 0)\n    throw new InvalidUnitError("Level must be a non-negative integer");\n  u.level = action.input.level;\n}',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "9a389e2f-3fa7-4ffe-9189-48b8fcacba69",
+                  code: "INVALID_UNIT",
+                  name: "InvalidUnitError",
+                  description: "The unit data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "99bf38cf-1370-4742-b750-5131d0602475",
+              name: "REMOVE_UNIT",
+              description: "Remove a floor",
+              schema: "input RemoveUnitInput { id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.id);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (state.units.length <= 1)\n  throw new InvalidUnitError("At least one floor must remain");\nstate.units = state.units.filter((x) => x.id !== action.input.id);\nif (state.activeUnitId === action.input.id)\n  state.activeUnitId = state.units[0].id;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "9a389e2f-3fa7-4ffe-9189-48b8fcacba69",
+                  code: "INVALID_UNIT",
+                  name: "InvalidUnitError",
+                  description: "The unit data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "ed55860a-351f-41bb-a0a8-7f650e116216",
+              name: "SET_UNIT_BACKGROUND",
+              description: "Set the floor plan image",
+              schema:
+                "input SetUnitBackgroundInput { unitId: OID! background: BackgroundInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst b = action.input.background;\nif (b.widthCm != null && (!Number.isFinite(b.widthCm) || b.widthCm <= 0))\n  throw new InvalidUnitError("Background width must be positive");\nif (b.heightCm != null && (!Number.isFinite(b.heightCm) || b.heightCm <= 0))\n  throw new InvalidUnitError("Background height must be positive");\nif (!Number.isFinite(b.x) || !Number.isFinite(b.y) || !Number.isFinite(b.scale) || !Number.isFinite(b.opacity) || !Number.isFinite(b.rotation))\n  throw new InvalidUnitError("Background geometry must be finite");\nu.background = {\n  dataUrl: b.dataUrl ?? null,\n  widthCm: b.widthCm ?? null,\n  heightCm: b.heightCm ?? null,\n  x: b.x, y: b.y, scale: b.scale, opacity: b.opacity, rotation: b.rotation,\n  locked: b.locked,\n};',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "9a389e2f-3fa7-4ffe-9189-48b8fcacba69",
+                  code: "INVALID_UNIT",
+                  name: "InvalidUnitError",
+                  description: "The unit data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "9c03cccf-077a-4d2d-9397-3bc82d95bd93",
+              name: "UPDATE_UNIT_BACKGROUND",
+              description: "Adjust the floor plan image",
+              schema:
+                "input UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst i = action.input;\nconst b = u.background ?? { dataUrl: null, widthCm: null, heightCm: null, x: 0, y: 0, scale: 1, opacity: 1, rotation: 0, locked: false };\nif (i.dataUrl !== undefined) b.dataUrl = i.dataUrl;\nif (i.widthCm !== undefined) {\n  if (i.widthCm !== null && (!Number.isFinite(i.widthCm) || i.widthCm <= 0)) throw new InvalidUnitError("Background width must be positive");\n  b.widthCm = i.widthCm;\n}\nif (i.heightCm !== undefined) {\n  if (i.heightCm !== null && (!Number.isFinite(i.heightCm) || i.heightCm <= 0)) throw new InvalidUnitError("Background height must be positive");\n  b.heightCm = i.heightCm;\n}\nif (i.x !== undefined) {\n  if (i.x === null || !Number.isFinite(i.x)) throw new InvalidUnitError("Background geometry must be finite");\n  b.x = i.x;\n}\nif (i.y !== undefined) {\n  if (i.y === null || !Number.isFinite(i.y)) throw new InvalidUnitError("Background geometry must be finite");\n  b.y = i.y;\n}\nif (i.scale !== undefined) {\n  if (i.scale === null || !Number.isFinite(i.scale) || i.scale <= 0) throw new InvalidUnitError("Background scale must be positive");\n  b.scale = i.scale;\n}\nif (i.opacity !== undefined) {\n  if (i.opacity === null || !Number.isFinite(i.opacity)) throw new InvalidUnitError("Background opacity must be finite");\n  b.opacity = i.opacity;\n}\nif (i.rotation !== undefined) {\n  if (i.rotation === null || !Number.isFinite(i.rotation)) throw new InvalidUnitError("Background rotation must be finite");\n  b.rotation = i.rotation;\n}\nif (i.locked !== undefined && i.locked !== null) b.locked = i.locked;\nu.background = b;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "9a389e2f-3fa7-4ffe-9189-48b8fcacba69",
+                  code: "INVALID_UNIT",
+                  name: "InvalidUnitError",
+                  description: "The unit data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "5f76e180-221c-4952-901e-d7beee4ab018",
+              name: "UPDATE_SETTINGS",
+              description: "Change display and pipe defaults",
+              schema:
+                "input UpdateSettingsInput { showLabels: Boolean showMountHeights: Boolean pipeDiameterMm: Float }",
+              reducer:
+                'const i = action.input;\nif (i.showLabels !== undefined && i.showLabels !== null) state.settings.showLabels = i.showLabels;\nif (i.showMountHeights !== undefined && i.showMountHeights !== null) state.settings.showMountHeights = i.showMountHeights;\nif (i.pipeDiameterMm !== undefined && i.pipeDiameterMm !== null) {\n  if (!Number.isFinite(i.pipeDiameterMm) || i.pipeDiameterMm <= 0)\n    throw new InvalidSettingsError("Pipe diameter must be positive");\n  state.settings.pipeDiameterMm = i.pipeDiameterMm;\n}',
+              template: "",
+              errors: [
+                {
+                  id: "eecc0ce1-537a-4864-8a5b-d07347cdfe1f",
+                  code: "INVALID_SETTINGS",
+                  name: "InvalidSettingsError",
+                  description: "The settings are invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+        {
+          id: "fc879ede-872e-412a-bf93-37f450dc794f",
+          name: "rooms",
+          description: "Room geometry",
+          operations: [
+            {
+              id: "a9a1748d-d8bb-495c-a333-9e807dfab500",
+              name: "ADD_ROOM",
+              description: "Add a room to a floor",
+              schema: "input AddRoomInput { unitId: OID! room: RoomInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = action.input.room;\nif (!r.name.trim()) throw new InvalidRoomError("A room needs a name");\nif (!Number.isInteger(r.labelX) || !Number.isInteger(r.labelY)) throw new InvalidRoomError("Room label coordinates must be integers");\nif (r.points.length < 3) throw new InvalidRoomError("A room needs at least three points");\nif (!r.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidRoomError("Room points must be finite");\nif ((u.rooms ?? []).some((x) => x.id === r.id)) throw new DuplicateIdError("Room id already exists");\nu.rooms = u.rooms ?? [];\nu.rooms.push({\n  id: r.id, name: r.name,\n  points: r.points.map((p) => ({ x: p.x, y: p.y })),\n  fillColor: r.fillColor ?? null,\n  labelX: r.labelX, labelY: r.labelY,\n  locked: r.locked ?? false,\n});',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "579dff65-c2e8-49c9-86b4-dce8cc504f78",
+                  code: "INVALID_ROOM",
+                  name: "InvalidRoomError",
+                  description: "The room data is invalid",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "21c04863-eadd-4298-8c37-ada88e75debe",
+              name: "UPDATE_ROOM",
+              description: "Change room geometry or name",
+              schema:
+                "input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = (u.rooms ?? []).find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRoomError("Unknown room");\nconst i = action.input;\nif (i.name !== undefined && i.name !== null) {\n  if (!i.name.trim()) throw new InvalidRoomError("A room needs a name");\n  r.name = i.name;\n}\nif (i.fillColor !== undefined) r.fillColor = i.fillColor;\nif (i.points !== undefined && i.points !== null) {\n  if (i.points.length < 3) throw new InvalidRoomError("A room needs at least three points");\n  if (!i.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidRoomError("Room points must be finite");\n  r.points = i.points.map((p) => ({ x: p.x, y: p.y }));\n}\nif (i.labelX !== undefined && i.labelX !== null) {\n  if (!Number.isFinite(i.labelX)) throw new InvalidRoomError("Room label must be finite");\n  r.labelX = i.labelX;\n}\nif (i.labelY !== undefined && i.labelY !== null) {\n  if (!Number.isFinite(i.labelY)) throw new InvalidRoomError("Room label must be finite");\n  r.labelY = i.labelY;\n}\nif (i.locked !== undefined && i.locked !== null) r.locked = i.locked;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "59eef5ed-49f3-494c-a33e-cd5b1c9f69d9",
+                  code: "UNKNOWN_ROOM",
+                  name: "UnknownRoomError",
+                  description: "The room does not exist",
+                  template: "",
+                },
+                {
+                  id: "579dff65-c2e8-49c9-86b4-dce8cc504f78",
+                  code: "INVALID_ROOM",
+                  name: "InvalidRoomError",
+                  description: "The room data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "0066da2b-c4ac-4e20-ac02-c783d3b65462",
+              name: "REMOVE_ROOM",
+              description: "Remove a room",
+              schema: "input RemoveRoomInput { unitId: OID! id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = (u.rooms ?? []).find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRoomError("Unknown room");\nif ((u.fixtures ?? []).some((f) => f.roomId === r.id))\n  throw new InvalidRoomError("Remove or move the fixtures in this room first");\nu.rooms = (u.rooms ?? []).filter((x) => x.id !== r.id);',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "59eef5ed-49f3-494c-a33e-cd5b1c9f69d9",
+                  code: "UNKNOWN_ROOM",
+                  name: "UnknownRoomError",
+                  description: "The room does not exist",
+                  template: "",
+                },
+                {
+                  id: "579dff65-c2e8-49c9-86b4-dce8cc504f78",
+                  code: "INVALID_ROOM",
+                  name: "InvalidRoomError",
+                  description: "The room data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+        {
+          id: "583e623c-c788-4c18-bf97-8544fb67e49f",
+          name: "fixtures",
+          description: "Sanitary, heating and ventilation fixtures",
+          operations: [
+            {
+              id: "6d09bccd-6479-4a8f-bd86-1115c29d2903",
+              name: "ADD_FIXTURE",
+              description: "Add a sanitary, heating or ventilation fixture",
+              schema:
+                "input AddFixtureInput { unitId: OID! fixture: FixtureInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst f = action.input.fixture;\nif (!f.kind.trim()) throw new InvalidFixtureError("A fixture needs a kind");\nif (!f.discipline.trim()) throw new InvalidFixtureError("A fixture needs a discipline");\nif (!f.name.trim()) throw new InvalidFixtureError("A fixture needs a name");\nif (!Number.isFinite(f.position.x) || !Number.isFinite(f.position.y)) throw new InvalidFixtureError("Fixture position must be finite");\nif (!Number.isFinite(f.rotation)) throw new InvalidFixtureError("Fixture rotation must be finite");\nif (f.mountHeightCm != null && (!Number.isFinite(f.mountHeightCm) || f.mountHeightCm < 0)) throw new InvalidFixtureError("Mounting height must be non-negative");\nif (f.roomId != null && !(u.rooms ?? []).some((r) => r.id === f.roomId)) throw new UnknownRoomError("Unknown room");\nif (u.fixtures.some((x) => x.id === f.id)) throw new DuplicateIdError("Fixture id already exists");\nu.fixtures.push({\n  id: f.id, kind: f.kind, discipline: f.discipline, name: f.name,\n  position: { x: f.position.x, y: f.position.y }, rotation: f.rotation,\n  roomId: f.roomId ?? null, mountHeightCm: f.mountHeightCm ?? null,\n  notes: f.notes ?? null, locked: f.locked ?? false,\n});',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "1461e689-031f-489b-b04e-561e4ec8c229",
+                  code: "INVALID_FIXTURE",
+                  name: "InvalidFixtureError",
+                  description: "The fixture data is invalid",
+                  template: "",
+                },
+                {
+                  id: "59eef5ed-49f3-494c-a33e-cd5b1c9f69d9",
+                  code: "UNKNOWN_ROOM",
+                  name: "UnknownRoomError",
+                  description: "The room does not exist",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "ade8b404-1602-4f93-bbb3-7d96ddd836eb",
+              name: "UPDATE_FIXTURE",
+              description: "Change fixture position or properties",
+              schema:
+                "input UpdateFixtureInput { unitId: OID! id: OID! kind: String name: String discipline: String position: PositionInput rotation: Float roomId: String mountHeightCm: Float notes: String locked: Boolean }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst f = u.fixtures.find((x) => x.id === action.input.id);\nif (!f) throw new UnknownFixtureError("Unknown fixture");\nconst i = action.input;\nif (i.kind !== undefined && i.kind !== null) {\n  if (!i.kind.trim()) throw new InvalidFixtureError("A fixture needs a kind");\n  f.kind = i.kind;\n}\nif (i.name !== undefined && i.name !== null) {\n  if (!i.name.trim()) throw new InvalidFixtureError("A fixture needs a name");\n  f.name = i.name;\n}\nif (i.discipline !== undefined && i.discipline !== null) {\n  if (!i.discipline.trim()) throw new InvalidFixtureError("A fixture needs a discipline");\n  f.discipline = i.discipline;\n}\nif (i.position !== undefined && i.position !== null) {\n  if (!Number.isFinite(i.position.x) || !Number.isFinite(i.position.y)) throw new InvalidFixtureError("Fixture position must be finite");\n  f.position = { x: i.position.x, y: i.position.y };\n}\nif (i.rotation !== undefined && i.rotation !== null) {\n  if (!Number.isFinite(i.rotation)) throw new InvalidFixtureError("Fixture rotation must be finite");\n  f.rotation = i.rotation;\n}\nif (i.roomId !== undefined) {\n  if (i.roomId !== null && !(u.rooms ?? []).some((r) => r.id === i.roomId)) throw new UnknownRoomError("Unknown room");\n  f.roomId = i.roomId;\n}\nif (i.mountHeightCm !== undefined) {\n  if (i.mountHeightCm !== null && (!Number.isFinite(i.mountHeightCm) || i.mountHeightCm < 0)) throw new InvalidFixtureError("Mounting height must be non-negative");\n  f.mountHeightCm = i.mountHeightCm;\n}\nif (i.notes !== undefined) f.notes = i.notes;\nif (i.locked !== undefined && i.locked !== null) f.locked = i.locked;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "6e66533d-ebd6-4063-a8d8-2031e6f264dd",
+                  code: "UNKNOWN_FIXTURE",
+                  name: "UnknownFixtureError",
+                  description: "The fixture does not exist",
+                  template: "",
+                },
+                {
+                  id: "1461e689-031f-489b-b04e-561e4ec8c229",
+                  code: "INVALID_FIXTURE",
+                  name: "InvalidFixtureError",
+                  description: "The fixture data is invalid",
+                  template: "",
+                },
+                {
+                  id: "59eef5ed-49f3-494c-a33e-cd5b1c9f69d9",
+                  code: "UNKNOWN_ROOM",
+                  name: "UnknownRoomError",
+                  description: "The room does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "8da65268-c534-45e1-ad91-cfd46c36badf",
+              name: "REMOVE_FIXTURE",
+              description: "Remove a fixture",
+              schema: "input RemoveFixtureInput { unitId: OID! id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (!u.fixtures.some((x) => x.id === action.input.id)) throw new UnknownFixtureError("Unknown fixture");\nu.fixtures = u.fixtures.filter((x) => x.id !== action.input.id);',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "6e66533d-ebd6-4063-a8d8-2031e6f264dd",
+                  code: "UNKNOWN_FIXTURE",
+                  name: "UnknownFixtureError",
+                  description: "The fixture does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+        {
+          id: "bbbfbc84-ecff-4322-8f31-d804022e3338",
+          name: "pipes",
+          description: "Water, waste, heating and vent pipes",
+          operations: [
+            {
+              id: "46d2cc53-1de1-4cab-af43-be95c27f28cf",
+              name: "ADD_PIPE_ROUTE",
+              description: "Add a water, waste, heating or vent pipe",
+              schema:
+                "input AddPipeRouteInput { unitId: OID! route: PipeRouteInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = action.input.route;\nif (!r.kind.trim()) throw new InvalidPipeRouteError("A pipe needs a kind");\nif (r.points.length < 2) throw new InvalidPipeRouteError("A pipe needs at least two points");\nif (!r.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidPipeRouteError("Pipe points must be finite");\nif (!Number.isFinite(r.diameterMm) || r.diameterMm <= 0) throw new InvalidPipeRouteError("Pipe diameter must be positive");\nif (r.slopePercent != null && (!Number.isFinite(r.slopePercent) || r.slopePercent < 0 || r.slopePercent > 100)) throw new InvalidPipeRouteError("Pipe slope must be between 0 and 100 percent");\nif (u.pipeRoutes.some((x) => x.id === r.id)) throw new DuplicateIdError("Pipe route id already exists");\nu.pipeRoutes.push({\n  id: r.id, kind: r.kind, points: r.points.map((p) => ({ x: p.x, y: p.y })),\n  diameterMm: r.diameterMm, slopePercent: r.slopePercent ?? null,\n  insulation: r.insulation ?? false, notes: r.notes ?? null,\n});',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "4888a941-fa4f-4a41-8ca6-35cc5376ae74",
+                  code: "INVALID_PIPE_ROUTE",
+                  name: "InvalidPipeRouteError",
+                  description: "The pipe route data is invalid",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "95880f09-226c-4c27-9c3c-c56dbfaeb097",
+              name: "UPDATE_PIPE_ROUTE",
+              description: "Change a pipe route",
+              schema:
+                "input UpdatePipeRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] diameterMm: Float slopePercent: Float insulation: Boolean notes: String }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = u.pipeRoutes.find((x) => x.id === action.input.id);\nif (!r) throw new UnknownPipeRouteError("Unknown pipe route");\nconst i = action.input;\nif (i.kind !== undefined && i.kind !== null) {\n  if (!i.kind.trim()) throw new InvalidPipeRouteError("A pipe needs a kind");\n  r.kind = i.kind;\n}\nif (i.points !== undefined && i.points !== null) {\n  if (i.points.length < 2) throw new InvalidPipeRouteError("A pipe needs at least two points");\n  if (!i.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidPipeRouteError("Pipe points must be finite");\n  r.points = i.points.map((p) => ({ x: p.x, y: p.y }));\n}\nif (i.diameterMm !== undefined && i.diameterMm !== null) {\n  if (!Number.isFinite(i.diameterMm) || i.diameterMm <= 0) throw new InvalidPipeRouteError("Pipe diameter must be positive");\n  r.diameterMm = i.diameterMm;\n}\nif (i.slopePercent !== undefined) {\n  if (i.slopePercent !== null && (!Number.isFinite(i.slopePercent) || i.slopePercent < 0 || i.slopePercent > 100)) throw new InvalidPipeRouteError("Pipe slope must be between 0 and 100 percent");\n  r.slopePercent = i.slopePercent;\n}\nif (i.insulation !== undefined && i.insulation !== null) r.insulation = i.insulation;\nif (i.notes !== undefined) r.notes = i.notes;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "392156a9-90db-4716-a054-e83582608b1f",
+                  code: "UNKNOWN_PIPE_ROUTE",
+                  name: "UnknownPipeRouteError",
+                  description: "The pipe route does not exist",
+                  template: "",
+                },
+                {
+                  id: "4888a941-fa4f-4a41-8ca6-35cc5376ae74",
+                  code: "INVALID_PIPE_ROUTE",
+                  name: "InvalidPipeRouteError",
+                  description: "The pipe route data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "0c76de90-49f3-488e-a5ff-95289de39415",
+              name: "REMOVE_PIPE_ROUTE",
+              description: "Remove a pipe route",
+              schema: "input RemovePipeRouteInput { unitId: OID! id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (!u.pipeRoutes.some((x) => x.id === action.input.id)) throw new UnknownPipeRouteError("Unknown pipe route");\nu.pipeRoutes = u.pipeRoutes.filter((x) => x.id !== action.input.id);',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "392156a9-90db-4716-a054-e83582608b1f",
+                  code: "UNKNOWN_PIPE_ROUTE",
+                  name: "UnknownPipeRouteError",
+                  description: "The pipe route does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+        {
+          id: "bf03acde-abbc-41d8-8d2b-d174d9d3e814",
+          name: "ducts",
+          description: "Ventilation ducts",
+          operations: [
+            {
+              id: "32713939-899d-4631-be79-be757b792c58",
+              name: "ADD_DUCT_ROUTE",
+              description: "Add a ventilation duct",
+              schema:
+                "input AddDuctRouteInput { unitId: OID! route: DuctRouteInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = action.input.route;\nif (!r.kind.trim()) throw new InvalidDuctRouteError("A duct needs a kind");\nif (r.points.length < 2) throw new InvalidDuctRouteError("A duct needs at least two points");\nif (!r.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidDuctRouteError("Duct points must be finite");\nif (!Number.isFinite(r.widthMm) || r.widthMm <= 0) throw new InvalidDuctRouteError("Duct width must be positive");\nif (!Number.isFinite(r.heightMm) || r.heightMm <= 0) throw new InvalidDuctRouteError("Duct height must be positive");\nif (r.airflowM3h != null && (!Number.isFinite(r.airflowM3h) || r.airflowM3h < 0)) throw new InvalidDuctRouteError("Airflow must be non-negative");\nif (u.ductRoutes.some((x) => x.id === r.id)) throw new DuplicateIdError("Duct route id already exists");\nu.ductRoutes.push({\n  id: r.id, kind: r.kind, points: r.points.map((p) => ({ x: p.x, y: p.y })),\n  widthMm: r.widthMm, heightMm: r.heightMm,\n  airflowM3h: r.airflowM3h ?? null, notes: r.notes ?? null,\n});',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "975e7b8a-b16c-41ac-b87c-ec0796096afb",
+                  code: "INVALID_DUCT_ROUTE",
+                  name: "InvalidDuctRouteError",
+                  description: "The duct route data is invalid",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "b10919e3-2b9e-4ada-953b-ced289e3fdf2",
+              name: "UPDATE_DUCT_ROUTE",
+              description: "Change a ventilation duct",
+              schema:
+                "input UpdateDuctRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] widthMm: Float heightMm: Float airflowM3h: Float notes: String }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = u.ductRoutes.find((x) => x.id === action.input.id);\nif (!r) throw new UnknownDuctRouteError("Unknown duct route");\nconst i = action.input;\nif (i.kind !== undefined && i.kind !== null) {\n  if (!i.kind.trim()) throw new InvalidDuctRouteError("A duct needs a kind");\n  r.kind = i.kind;\n}\nif (i.points !== undefined && i.points !== null) {\n  if (i.points.length < 2) throw new InvalidDuctRouteError("A duct needs at least two points");\n  if (!i.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y))) throw new InvalidDuctRouteError("Duct points must be finite");\n  r.points = i.points.map((p) => ({ x: p.x, y: p.y }));\n}\nif (i.widthMm !== undefined && i.widthMm !== null) {\n  if (!Number.isFinite(i.widthMm) || i.widthMm <= 0) throw new InvalidDuctRouteError("Duct width must be positive");\n  r.widthMm = i.widthMm;\n}\nif (i.heightMm !== undefined && i.heightMm !== null) {\n  if (!Number.isFinite(i.heightMm) || i.heightMm <= 0) throw new InvalidDuctRouteError("Duct height must be positive");\n  r.heightMm = i.heightMm;\n}\nif (i.airflowM3h !== undefined) {\n  if (i.airflowM3h !== null && (!Number.isFinite(i.airflowM3h) || i.airflowM3h < 0)) throw new InvalidDuctRouteError("Airflow must be non-negative");\n  r.airflowM3h = i.airflowM3h;\n}\nif (i.notes !== undefined) r.notes = i.notes;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "ad3e297e-d2b2-4773-a773-6e589feea78a",
+                  code: "UNKNOWN_DUCT_ROUTE",
+                  name: "UnknownDuctRouteError",
+                  description: "The duct route does not exist",
+                  template: "",
+                },
+                {
+                  id: "975e7b8a-b16c-41ac-b87c-ec0796096afb",
+                  code: "INVALID_DUCT_ROUTE",
+                  name: "InvalidDuctRouteError",
+                  description: "The duct route data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "3057a67a-1502-4d35-b4fe-53443c800c46",
+              name: "REMOVE_DUCT_ROUTE",
+              description: "Remove a ventilation duct",
+              schema: "input RemoveDuctRouteInput { unitId: OID! id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (!u.ductRoutes.some((x) => x.id === action.input.id)) throw new UnknownDuctRouteError("Unknown duct route");\nu.ductRoutes = u.ductRoutes.filter((x) => x.id !== action.input.id);',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "ad3e297e-d2b2-4773-a773-6e589feea78a",
+                  code: "UNKNOWN_DUCT_ROUTE",
+                  name: "UnknownDuctRouteError",
+                  description: "The duct route does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+        {
+          id: "653a2c4d-5d65-432d-98cf-4f758bcfff6e",
+          name: "risers",
+          description: "Vertical shafts and risers",
+          operations: [
+            {
+              id: "6e7406ae-11b1-4e84-af1d-9a53ed3fd511",
+              name: "ADD_RISER",
+              description: "Add a vertical riser or shaft",
+              schema: "input AddRiserInput { unitId: OID! riser: RiserInput! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = action.input.riser;\nif (!r.kind.trim()) throw new InvalidRiserError("A riser needs a kind");\nif (!Number.isFinite(r.x) || !Number.isFinite(r.y)) throw new InvalidRiserError("Riser position must be finite");\nif (r.label != null && !r.label.trim()) throw new InvalidRiserError("Riser label cannot be empty");\nif (u.risers.some((x) => x.id === r.id)) throw new DuplicateIdError("Riser id already exists");\nu.risers.push({\n  id: r.id, kind: r.kind, x: r.x, y: r.y,\n  label: r.label ?? null, notes: r.notes ?? null,\n});',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "50df1f62-ea72-45c6-8d7d-3264aa87ce79",
+                  code: "INVALID_RISER",
+                  name: "InvalidRiserError",
+                  description: "The riser data is invalid",
+                  template: "",
+                },
+                {
+                  id: "023ad168-8e2a-4eea-80b0-afd2acdc2c73",
+                  code: "DUPLICATE_ID",
+                  name: "DuplicateIdError",
+                  description: "The id is already in use",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "2ac607fd-49eb-42bf-99c2-6b473a29ed96",
+              name: "UPDATE_RISER",
+              description: "Change a riser",
+              schema:
+                "input UpdateRiserInput { unitId: OID! id: OID! kind: String x: Float y: Float label: String notes: String }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nconst r = u.risers.find((x) => x.id === action.input.id);\nif (!r) throw new UnknownRiserError("Unknown riser");\nconst i = action.input;\nif (i.kind !== undefined && i.kind !== null) {\n  if (!i.kind.trim()) throw new InvalidRiserError("A riser needs a kind");\n  r.kind = i.kind;\n}\nif (i.x !== undefined && i.x !== null) {\n  if (!Number.isFinite(i.x)) throw new InvalidRiserError("Riser position must be finite");\n  r.x = i.x;\n}\nif (i.y !== undefined && i.y !== null) {\n  if (!Number.isFinite(i.y)) throw new InvalidRiserError("Riser position must be finite");\n  r.y = i.y;\n}\nif (i.label !== undefined) {\n  if (i.label !== null && !i.label.trim()) throw new InvalidRiserError("Riser label cannot be empty");\n  r.label = i.label;\n}\nif (i.notes !== undefined) r.notes = i.notes;',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "eec6ada2-8143-438e-8b16-396ced4235e2",
+                  code: "UNKNOWN_RISER",
+                  name: "UnknownRiserError",
+                  description: "The riser does not exist",
+                  template: "",
+                },
+                {
+                  id: "50df1f62-ea72-45c6-8d7d-3264aa87ce79",
+                  code: "INVALID_RISER",
+                  name: "InvalidRiserError",
+                  description: "The riser data is invalid",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+            {
+              id: "abd65c2b-32e2-4ba6-9511-3a029b8a21ab",
+              name: "REMOVE_RISER",
+              description: "Remove a riser",
+              schema: "input RemoveRiserInput { unitId: OID! id: OID! }",
+              reducer:
+                'const u = state.units.find((x) => x.id === action.input.unitId);\nif (!u) throw new UnknownUnitError("Unknown unit");\nif (!u.risers.some((x) => x.id === action.input.id)) throw new UnknownRiserError("Unknown riser");\nu.risers = u.risers.filter((x) => x.id !== action.input.id);',
+              template: "",
+              errors: [
+                {
+                  id: "ff8a0c5e-fe76-447b-946d-2552b83fb772",
+                  code: "UNKNOWN_UNIT",
+                  name: "UnknownUnitError",
+                  description: "The unit does not exist",
+                  template: "",
+                },
+                {
+                  id: "eec6ada2-8143-438e-8b16-396ced4235e2",
+                  code: "UNKNOWN_RISER",
+                  name: "UnknownRiserError",
+                  description: "The riser does not exist",
+                  template: "",
+                },
+              ],
+              examples: [],
+              scope: "global",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};

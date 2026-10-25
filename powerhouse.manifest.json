@@ -10,6 +10,10 @@
     {
       "id": "planvolt/electrical-plan",
       "name": "Electrical Plan"
+    },
+    {
+      "id": "planvolt/hlsk-plan",
+      "name": "HLSK Plan"
     }
   ],
   "apps": [],
@@ -17,7 +21,9 @@
     {
       "id": "electrical-plan-editor",
       "name": "Electrical Plan Editor",
-      "documentTypes": ["planvolt/electrical-plan"]
+      "documentTypes": [
+        "planvolt/electrical-plan"
+      ]
     }
   ],
   "processors": [],

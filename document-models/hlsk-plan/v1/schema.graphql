@@ -183,84 +183,302 @@ input RiserInput {
   notes: String
 }
 
-input AddUnitInput { id: OID! name: String! level: Int! }
-input UpdateUnitInput { id: OID! name: String level: Int }
-input RemoveUnitInput { id: OID! }
-input AddRoomInput { unitId: OID! room: RoomInput! }
-input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }
-input RemoveRoomInput { unitId: OID! id: OID! }
-input AddFixtureInput { unitId: OID! fixture: FixtureInput! }
-input UpdateFixtureInput { unitId: OID! id: OID! kind: String name: String discipline: String position: PositionInput rotation: Float roomId: String mountHeightCm: Float notes: String locked: Boolean }
-input RemoveFixtureInput { unitId: OID! id: OID! }
-input AddPipeRouteInput { unitId: OID! route: PipeRouteInput! }
-input UpdatePipeRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] diameterMm: Float slopePercent: Float insulation: Boolean notes: String }
-input RemovePipeRouteInput { unitId: OID! id: OID! }
-input AddDuctRouteInput { unitId: OID! route: DuctRouteInput! }
-input UpdateDuctRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] widthMm: Float heightMm: Float airflowM3h: Float notes: String }
-input RemoveDuctRouteInput { unitId: OID! id: OID! }
-input AddRiserInput { unitId: OID! riser: RiserInput! }
-input UpdateRiserInput { unitId: OID! id: OID! kind: String x: Float y: Float label: String notes: String }
-input RemoveRiserInput { unitId: OID! id: OID! }
-input SetProjectNameInput { name: String! }
-input SetActiveUnitInput { unitId: OID! }
-input SetUnitBackgroundInput { unitId: OID! background: BackgroundInput! }
-input UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }
-input UpdateSettingsInput { showLabels: Boolean showMountHeights: Boolean pipeDiameterMm: Float }
+input AddUnitInput {
+  id: OID!
+  name: String!
+  level: Int!
+}
+input UpdateUnitInput {
+  id: OID!
+  name: String
+  level: Int
+}
+input RemoveUnitInput {
+  id: OID!
+}
+input AddRoomInput {
+  unitId: OID!
+  room: RoomInput!
+}
+input UpdateRoomInput {
+  unitId: OID!
+  id: OID!
+  name: String
+  fillColor: String
+  points: [PositionInput!]
+  labelX: Float
+  labelY: Float
+  locked: Boolean
+}
+input RemoveRoomInput {
+  unitId: OID!
+  id: OID!
+}
+input AddFixtureInput {
+  unitId: OID!
+  fixture: FixtureInput!
+}
+input UpdateFixtureInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  name: String
+  discipline: String
+  position: PositionInput
+  rotation: Float
+  roomId: String
+  mountHeightCm: Float
+  notes: String
+  locked: Boolean
+}
+input RemoveFixtureInput {
+  unitId: OID!
+  id: OID!
+}
+input AddPipeRouteInput {
+  unitId: OID!
+  route: PipeRouteInput!
+}
+input UpdatePipeRouteInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  points: [PositionInput!]
+  diameterMm: Float
+  slopePercent: Float
+  insulation: Boolean
+  notes: String
+}
+input RemovePipeRouteInput {
+  unitId: OID!
+  id: OID!
+}
+input AddDuctRouteInput {
+  unitId: OID!
+  route: DuctRouteInput!
+}
+input UpdateDuctRouteInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  points: [PositionInput!]
+  widthMm: Float
+  heightMm: Float
+  airflowM3h: Float
+  notes: String
+}
+input RemoveDuctRouteInput {
+  unitId: OID!
+  id: OID!
+}
+input AddRiserInput {
+  unitId: OID!
+  riser: RiserInput!
+}
+input UpdateRiserInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  x: Float
+  y: Float
+  label: String
+  notes: String
+}
+input RemoveRiserInput {
+  unitId: OID!
+  id: OID!
+}
+input SetProjectNameInput {
+  name: String!
+}
+input SetActiveUnitInput {
+  unitId: OID!
+}
+input SetUnitBackgroundInput {
+  unitId: OID!
+  background: BackgroundInput!
+}
+input UpdateUnitBackgroundInput {
+  unitId: OID!
+  dataUrl: String
+  widthCm: Float
+  heightCm: Float
+  x: Float
+  y: Float
+  scale: Float
+  opacity: Float
+  rotation: Float
+  locked: Boolean
+}
+input UpdateSettingsInput {
+  showLabels: Boolean
+  showMountHeights: Boolean
+  pipeDiameterMm: Float
+}
 
 # core
 
-input SetProjectNameInput { name: String! }
+input SetProjectNameInput {
+  name: String!
+}
 
-input SetActiveUnitInput { unitId: OID! }
+input SetActiveUnitInput {
+  unitId: OID!
+}
 
-input AddUnitInput { id: OID! name: String! level: Int! }
+input AddUnitInput {
+  id: OID!
+  name: String!
+  level: Int!
+}
 
-input UpdateUnitInput { id: OID! name: String level: Int }
+input UpdateUnitInput {
+  id: OID!
+  name: String
+  level: Int
+}
 
-input RemoveUnitInput { id: OID! }
+input RemoveUnitInput {
+  id: OID!
+}
 
-input SetUnitBackgroundInput { unitId: OID! background: BackgroundInput! }
+input SetUnitBackgroundInput {
+  unitId: OID!
+  background: BackgroundInput!
+}
 
-input UpdateUnitBackgroundInput { unitId: OID! dataUrl: String widthCm: Float heightCm: Float x: Float y: Float scale: Float opacity: Float rotation: Float locked: Boolean }
+input UpdateUnitBackgroundInput {
+  unitId: OID!
+  dataUrl: String
+  widthCm: Float
+  heightCm: Float
+  x: Float
+  y: Float
+  scale: Float
+  opacity: Float
+  rotation: Float
+  locked: Boolean
+}
 
-input UpdateSettingsInput { showLabels: Boolean showMountHeights: Boolean pipeDiameterMm: Float }
+input UpdateSettingsInput {
+  showLabels: Boolean
+  showMountHeights: Boolean
+  pipeDiameterMm: Float
+}
 
 # rooms
 
-input AddRoomInput { unitId: OID! room: RoomInput! }
+input AddRoomInput {
+  unitId: OID!
+  room: RoomInput!
+}
 
-input UpdateRoomInput { unitId: OID! id: OID! name: String fillColor: String points: [PositionInput!] labelX: Float labelY: Float locked: Boolean }
+input UpdateRoomInput {
+  unitId: OID!
+  id: OID!
+  name: String
+  fillColor: String
+  points: [PositionInput!]
+  labelX: Float
+  labelY: Float
+  locked: Boolean
+}
 
-input RemoveRoomInput { unitId: OID! id: OID! }
+input RemoveRoomInput {
+  unitId: OID!
+  id: OID!
+}
 
 # fixtures
 
-input AddFixtureInput { unitId: OID! fixture: FixtureInput! }
+input AddFixtureInput {
+  unitId: OID!
+  fixture: FixtureInput!
+}
 
-input UpdateFixtureInput { unitId: OID! id: OID! kind: String name: String discipline: String position: PositionInput rotation: Float roomId: String mountHeightCm: Float notes: String locked: Boolean }
+input UpdateFixtureInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  name: String
+  discipline: String
+  position: PositionInput
+  rotation: Float
+  roomId: String
+  mountHeightCm: Float
+  notes: String
+  locked: Boolean
+}
 
-input RemoveFixtureInput { unitId: OID! id: OID! }
+input RemoveFixtureInput {
+  unitId: OID!
+  id: OID!
+}
 
 # pipes
 
-input AddPipeRouteInput { unitId: OID! route: PipeRouteInput! }
+input AddPipeRouteInput {
+  unitId: OID!
+  route: PipeRouteInput!
+}
 
-input UpdatePipeRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] diameterMm: Float slopePercent: Float insulation: Boolean notes: String }
+input UpdatePipeRouteInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  points: [PositionInput!]
+  diameterMm: Float
+  slopePercent: Float
+  insulation: Boolean
+  notes: String
+}
 
-input RemovePipeRouteInput { unitId: OID! id: OID! }
+input RemovePipeRouteInput {
+  unitId: OID!
+  id: OID!
+}
 
 # ducts
 
-input AddDuctRouteInput { unitId: OID! route: DuctRouteInput! }
+input AddDuctRouteInput {
+  unitId: OID!
+  route: DuctRouteInput!
+}
 
-input UpdateDuctRouteInput { unitId: OID! id: OID! kind: String points: [PositionInput!] widthMm: Float heightMm: Float airflowM3h: Float notes: String }
+input UpdateDuctRouteInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  points: [PositionInput!]
+  widthMm: Float
+  heightMm: Float
+  airflowM3h: Float
+  notes: String
+}
 
-input RemoveDuctRouteInput { unitId: OID! id: OID! }
+input RemoveDuctRouteInput {
+  unitId: OID!
+  id: OID!
+}
 
 # risers
 
-input AddRiserInput { unitId: OID! riser: RiserInput! }
+input AddRiserInput {
+  unitId: OID!
+  riser: RiserInput!
+}
 
-input UpdateRiserInput { unitId: OID! id: OID! kind: String x: Float y: Float label: String notes: String }
+input UpdateRiserInput {
+  unitId: OID!
+  id: OID!
+  kind: String
+  x: Float
+  y: Float
+  label: String
+  notes: String
+}
 
-input RemoveRiserInput { unitId: OID! id: OID! }
+input RemoveRiserInput {
+  unitId: OID!
+  id: OID!
+}

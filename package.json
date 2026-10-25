@@ -1,7 +1,7 @@
 {
   "name": "planvolt",
   "version": "1.0.0",
-  "description": "Electrical planning for Powerhouse: DIN 18015 installation plan, circuits, BOM, cabinet layout, KNX and inspection protocol.",
+  "description": "Electrical and HLSK planning for Powerhouse: DIN 18015 installation plans, circuits, BOM, cabinet, KNX, inspection protocol, sanitary/heating/ventilation/climate fixtures, pipe and duct routes, risers, checks and trade drive apps.",
   "license": "AGPL-3.0-only",
   "files": [
     "/dist"

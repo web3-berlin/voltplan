@@ -378,6 +378,8 @@ export const PlanCanvas = forwardRef<PlanCanvasHandle, Props>(
       if (event.button !== 0) return;
       const target = event.target as Element | null;
       if (
+        !placementDefId &&
+        !drawMode &&
         target?.closest(
           "[data-fixture], [data-room], [data-pipe], [data-duct], [data-riser]",
         )
